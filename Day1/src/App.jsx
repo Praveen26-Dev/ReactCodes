@@ -1,5 +1,10 @@
-import React from "react";
+import React from 'react'
+import First from './First'
 
-let App=()=>{
-
+function App() {
+  return (
+    <div><First/></div>
+  )
 }
+
+export default App
