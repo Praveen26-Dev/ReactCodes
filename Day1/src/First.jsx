@@ -13,7 +13,7 @@ function First() {
 
   return (
     <div>
-        <h1 style={headingStyle}>Hello From Paveen!!!!</h1>
+        <h1 style={headingStyle}>Hello From Praveen!!!!</h1>
         <p>My City is <b>{city}</b></p>
         <b>Sum</b> is {a+b}
         <h3>Year is :{year}</h3>
