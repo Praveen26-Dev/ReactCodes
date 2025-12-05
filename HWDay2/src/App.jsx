@@ -1,11 +1,12 @@
 import React from "react";
 import "./App.css"
 import Cards from "./Cards";
+import ShowText from "./Day2/ShowText";
 
 function App() {
   return (
-    <div id="container">
-      <Cards
+    <>
+    {/* <Cards
         name="Nike Air Max"
         price="₹2999"
         img="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1000&auto=format&fit=crop&q=60"
@@ -21,10 +22,12 @@ function App() {
         name="MacBook"
         price="₹99000"
         img="https://images.unsplash.com/photo-1514826786317-59744fe2a548?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFwcGxlJTIwbWFjfGVufDB8fDB8fHww"
-        description="Built Like a Bull"/>
+        description="Built Like a Bull"/> */}
+
+        <ShowText/>
+    </>
         
-    </div>
-  );
+  )
 }
 
 export default App;
