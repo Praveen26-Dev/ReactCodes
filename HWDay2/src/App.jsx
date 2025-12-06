@@ -1,9 +1,21 @@
 import React from "react";
-import "./App.css"
-import Cards from "./Cards";
-import ShowText from "./Day2/ShowText";
+// import "./App.css"
+import Toggel from "./Day2/Toggel";
+// import ImageProps from "./Day2/ImageProps";
+// import TailwindButton from "./Day2/TailwindButton";
+// import Cards from "./Cards";
+// import FontSize from "./Day2/FontSize";
+// import MapProps from "./Day2/MapProps";
+
+
 
 function App() {
+  const courses = [
+    { name: "React", duration: "3 months" },
+    { name: "JavaScript", duration: "2 months" },
+    { name: "Node.js", duration: "2.5 months" },
+    { name: "MongoDB", duration: "1.5 months" }
+  ];
   return (
     <>
     {/* <Cards
@@ -23,8 +35,18 @@ function App() {
         price="₹99000"
         img="https://images.unsplash.com/photo-1514826786317-59744fe2a548?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFwcGxlJTIwbWFjfGVufDB8fDB8fHww"
         description="Built Like a Bull"/> */}
+        {/* <ImageProps 
+         name="MacBook"
+         city="Bhopal"
+         img="https://images.unsplash.com/photo-1514826786317-59744fe2a548?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFwcGxlJTIwbWFjfGVufDB8fDB8fHww"
+        /> */}
 
-        <ShowText/>
+      
+      {/* {courses.map((course) => (
+        <MapProps name={course.name} duration={course.duration} />
+      ))} */}.
+
+      <Toggel/>
     </>
         
   )
