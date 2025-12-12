@@ -1,109 +1,150 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { gsap } from "gsap";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
-  const navRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    gsap.from(navRef.current, {
-      y: -60,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out",
-    });
-  }, []);
-
   return (
-    <nav
-      ref={navRef}
-      className="w-full fixed top-0 left-0 z-50 bg-black/40 backdrop-blur-md text-white py-4 shadow-lg"
+    <motion.nav
+      initial={{ y: -70, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="w-full fixed top-0 left-0 z-50 bg-black/40 backdrop-blur-xl text-white py-4 shadow-xl"
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6">
+
         {/* Logo */}
-        <h1 className="text-xl sm:text-2xl font-bold">HotelEase</h1>
+        <motion.h1
+          whileHover={{ scale: 1.04 }}
+          className="text-xl sm:text-2xl font-extrabold tracking-wide text-yellow-400 drop-shadow-md"
+        >
+          HotelEase
+        </motion.h1>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-6 text-base md:text-lg font-medium">
-          <Link to="/"><li className="hover:text-yellow-400 transition">Home</li></Link>
-          <li className="hover:text-yellow-400 transition">About</li>
-          <li className="hover:text-yellow-400 transition">Rooms</li>
-          <li className="hover:text-yellow-400 transition">Contact</li>
+        <ul className="hidden md:flex gap-8 text-base md:text-lg font-medium">
+          {["Home", "About", "Rooms", "Contact"].map((item, i) => (
+            <Link key={i} to={item === "Home" ? "/" : `/${item.toLowerCase()}`}>
+              <motion.li
+                whileHover={{ scale: 1.1, color: "#facc15" }}
+                className="cursor-pointer relative group transition"
+              >
+                {item}
+                {/* Underline Hover Animation */}
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+              </motion.li>
+            </Link>
+          ))}
         </ul>
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex gap-3">
           <Link to="/login">
-            <button className="px-3 sm:px-4 py-1 sm:py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition text-sm sm:text-base">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition"
+            >
               Login
-            </button>
+            </motion.button>
           </Link>
 
           <Link to="/signup">
-            <button className="px-3 sm:px-4 py-1 sm:py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition text-sm sm:text-base">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
+            >
               Sign Up
-            </button>
+            </motion.button>
           </Link>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="focus:outline-none"
-          >
-            <svg
-              className="w-6 h-6 text-white"
+          <button onClick={() => setIsOpen(!isOpen)}>
+            <motion.svg
+              whileTap={{ scale: 0.8 }}
+              className="w-7 h-7 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               {isOpen ? (
-                <path
+                <motion.path
+                  initial={{ rotate: -90 }}
+                  animate={{ rotate: 0 }}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
                   d="M6 18L18 6M6 6l12 12"
                 />
               ) : (
-                <path
+                <motion.path
+                  initial={{ rotate: 90 }}
+                  animate={{ rotate: 0 }}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               )}
-            </svg>
+            </motion.svg>
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-black/90 backdrop-blur-md w-full text-center py-4">
-          <ul className="flex flex-col gap-4 text-lg font-medium">
-            <Link to="/"><li className="hover:text-yellow-400 transition" onClick={() => setIsOpen(false)}>Home</li></Link>
-            <li className="hover:text-yellow-400 transition" onClick={() => setIsOpen(false)}>About</li>
-            <li className="hover:text-yellow-400 transition" onClick={() => setIsOpen(false)}>Rooms</li>
-            <li className="hover:text-yellow-400 transition" onClick={() => setIsOpen(false)}>Contact</li>
-            <div className="flex flex-col gap-3 mt-3">
-              <Link to="/login">
-                <button className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition">
-                  Login
-                </button>
-              </Link>
-              <Link to="/signup">
-                <button className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition">
-                  Sign Up
-                </button>
-              </Link>
-            </div>
-          </ul>
-        </div>
-      )}
-    </nav>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-black/90 backdrop-blur-xl w-full text-center py-5"
+          >
+            <ul className="flex flex-col gap-6 text-lg font-medium">
+              {["Home", "About", "Rooms", "Contact"].map((item, i) => (
+                <Link
+                  key={i}
+                  to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <motion.li
+                    whileHover={{ scale: 1.1, color: "#facc15" }}
+                    className="transition"
+                  >
+                    {item}
+                  </motion.li>
+                </Link>
+              ))}
+
+              <div className="flex flex-col gap-3 mt-3">
+                <Link to="/login">
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition"
+                  >
+                    Login
+                  </motion.button>
+                </Link>
+
+                <Link to="/signup">
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
+                  >
+                    Sign Up
+                  </motion.button>
+                </Link>
+              </div>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 
