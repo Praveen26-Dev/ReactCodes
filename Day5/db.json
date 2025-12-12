@@ -1,0 +1,39 @@
+{
+    "hotel":[
+        {
+            "name":"Praveen",
+            "age":22,
+            "phoneNo":344567,
+            "AdharNo":234567765,
+            "city":"Bhopal",
+            "checkin":"15-12-25",
+            "checkout":"18-12-25",
+            "people":2,
+            "total":1000
+        },
+        {
+            
+            "name":"Arpit",
+            "age":23,
+            "phoneNo":987654,
+            "AdharNo":256543225,
+            "city":"Bhopal",
+            "checkin":"15-12-25",
+            "checkout":"18-12-25",
+            "people":2,
+            "total":1000
+        },
+        {
+            
+            "name":"Naresh",
+            "age":25,
+            "phoneNo":34567876,
+            "AdharNo":876543,
+            "city":"Bhopal",
+            "checkin":"15-12-25",
+            "checkout":"18-12-25",
+            "people":2,
+            "total":1000
+        }
+    ]
+}
