@@ -32,7 +32,7 @@ const Navbar = () => {
               >
                 {item}
                 {/* Underline Hover Animation */}
-                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
               </motion.li>
             </Link>
           ))}

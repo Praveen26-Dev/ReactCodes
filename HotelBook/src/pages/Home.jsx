@@ -51,7 +51,7 @@ const Home = () => {
             transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-yellow-400/40 duration-300 text-sm sm:text-base md:text-lg"
+            className="bg-linear-to-r from-yellow-400 to-yellow-600 text-black px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-yellow-400/40 duration-300 text-sm sm:text-base md:text-lg"
           >
             Explore Rooms
           </motion.button>
