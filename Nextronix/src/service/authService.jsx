@@ -1,17 +1,13 @@
-import axiosInstance from "../api/axiosInstance";
+import { data } from "react-router-dom";
+import api from "../api/axiosInstance";
 
-export const registerUser = (data) => {
-  return axiosInstance.post("/auth/register", data);
-};
+export const authService = {
+    register : (data)=>api.post("/register",data),
+    login : (data)=> api.post("/login",data),
+    googleLogin:(idToken)=>api.post("google",{idToken}),
+    forgotPassword:(data)=>api.post("/forgot-password",data),
+    resetPassword:(data)=> api.post("/reset-password",data),
+    validateToken: (token)=> api.get(`/reset-password/validate?token=${token}`)
 
-export const verifyEmailOtp = (email, otp) => {
-  return axiosInstance.post("/auth/verify-email-otp", null, {
-    params: { email, otp },
-  });
-};
 
-export const verifyPhoneOtp = (phoneNo, otp) => {
-  return axiosInstance.post("/auth/verify-phone-otp", null, {
-    params: { phoneNo, otp },
-  });
 };

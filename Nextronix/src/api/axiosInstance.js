@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
+const api = axios.create({
   baseURL: "http://localhost:9090",
   headers: {
     "Content-Type": "application/json",
@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 });
 
 // JWT interceptor (as per your base code)
-axiosInstance.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -19,4 +19,4 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default axiosInstance;
+export default api;

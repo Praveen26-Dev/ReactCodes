@@ -1,138 +1,101 @@
 import React, { useState } from "react";
+import Register from "./pages/Register";
 import '../App.css'
-import {
-  handleRegister,
-  handleEmailVerify,
-  handlePhoneVerify,
-} from "../controller/registerController";
-
 const Register = () => {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     phoneNo: "",
   });
 
-  const [emailOtp, setEmailOtp] = useState("");
-  const [phoneOtp, setPhoneOtp] = useState("");
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [phoneVerified, setPhoneVerified] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const submitForm = (e) => {
+    e.preventDefault();
+    console.log(form); // backend later connect
+  };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-6 rounded shadow">
-
-        <h2 className="text-2xl font-bold text-center mb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        
+        <h2 className="text-3xl font-bold text-center mb-2">
           Create Account
         </h2>
+        <p className="text-center text-gray-500 mb-6">
+          Register to get started
+        </p>
 
-        <form
-          className="space-y-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleRegister(formData, setLoading);
-          }}
-        >
-          <input
-            className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            placeholder="Name"
-            onChange={(e) =>
-              setFormData({ ...formData, name: e.target.value })
-            }
-          />
+        <form onSubmit={submitForm} className="space-y-4">
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your name"
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+            />
+          </div>
 
-          <input
-            className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            placeholder="Email"
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+            />
+          </div>
 
-          <input
-            type="password"
-            className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            placeholder="Password"
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Create a password"
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+            />
+          </div>
 
-          <input
-            className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            placeholder="Phone Number"
-            onChange={(e) =>
-              setFormData({ ...formData, phoneNo: e.target.value })
-            }
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              name="phoneNo"
+              placeholder="Enter phone number"
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+            />
+          </div>
 
           <button
-            disabled={loading}
-            className="w-full bg-cyan-500 text-white py-2 rounded hover:bg-cyan-600 disabled:opacity-50"
+            type="submit"
+            className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-gray-900 transition"
           >
-            {loading ? "Registering..." : "Register"}
+            Register
           </button>
         </form>
 
-        {/* OTP SECTION */}
-        <div className="mt-6 space-y-4">
-
-          <div>
-            <h4 className="font-semibold mb-1">Email OTP</h4>
-            <input
-              className="w-full border px-3 py-2 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              placeholder="Enter Email OTP"
-              onChange={(e) => setEmailOtp(e.target.value)}
-            />
-            <button
-              className="w-full bg-green-500 text-white py-1 rounded hover:bg-green-600"
-              onClick={() =>
-                handleEmailVerify(
-                  formData.email,
-                  emailOtp,
-                  setEmailVerified
-                )
-              }
-            >
-              Verify Email
-            </button>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-1">Phone OTP</h4>
-            <input
-              className="w-full border px-3 py-2 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              placeholder="Enter Phone OTP"
-              onChange={(e) => setPhoneOtp(e.target.value)}
-            />
-            <button
-              className="w-full bg-green-500 text-white py-1 rounded hover:bg-green-600"
-              onClick={() =>
-                handlePhoneVerify(
-                  formData.phoneNo,
-                  phoneOtp,
-                  setPhoneVerified
-                )
-              }
-            >
-              Verify Phone
-            </button>
-          </div>
-        </div>
-
-        {/* STATUS */}
-        <p
-          className={`mt-4 text-center font-semibold ${
-            emailVerified && phoneVerified
-              ? "text-green-600"
-              : "text-orange-500"
-          }`}
-        >
-          Status:{" "}
-          {emailVerified && phoneVerified ? "ACTIVE" : "PENDING"}
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Already have an account?{" "}
+          <span className="text-black font-medium cursor-pointer hover:underline">
+            Login
+          </span>
         </p>
       </div>
     </div>
