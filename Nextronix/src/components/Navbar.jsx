@@ -19,6 +19,14 @@ const Navbar = () => {
           Nextronix
         </Link>
 
+        {/* HOME LINK */}
+        <Link
+          to="/"
+          className="hover:text-yellow-400 transition font-medium"
+        >
+          Home
+        </Link>
+
         {/* SEARCH BAR */}
         <div className="flex-1 hidden md:flex">
           <input
@@ -48,10 +56,7 @@ const Navbar = () => {
           {/* AUTH */}
           {!token ? (
             <>
-              <Link
-                to="/login"
-                className="hover:text-yellow-400 transition"
-              >
+              <Link to="/login" className="hover:text-yellow-400 transition">
                 Login
               </Link>
               <Link
@@ -63,10 +68,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link
-                to="/profile"
-                className="hover:text-yellow-400 transition"
-              >
+              <Link to="/profile" className="hover:text-yellow-400 transition">
                 Profile
               </Link>
               <button

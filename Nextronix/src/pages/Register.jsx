@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import Register from "./pages/Register";
-import '../App.css'
+import { useNavigate } from "react-router-dom";
+import { authController } from "../controller/authController";
+import "../App.css";
+
 const Register = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -9,13 +13,33 @@ const Register = () => {
     phoneNo: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-    console.log(form); // backend later connect
+
+    try {
+      setLoading(true);
+      setError("");
+
+      // 🔥 BACKEND REGISTER CALL
+      await authController.register(form);
+
+      // 🔁 Redirect to Verify OTP page
+      navigate(
+        `/verify-otp?email=${form.email}&phone=${form.phoneNo}`
+      );
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,6 +53,12 @@ const Register = () => {
           Register to get started
         </p>
 
+        {error && (
+          <p className="text-red-500 text-center mb-4 text-sm">
+            {error}
+          </p>
+        )}
+
         <form onSubmit={submitForm} className="space-y-4">
           
           <div>
@@ -40,7 +70,7 @@ const Register = () => {
               name="name"
               placeholder="Enter your name"
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
           </div>
 
@@ -53,7 +83,7 @@ const Register = () => {
               name="email"
               placeholder="Enter your email"
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
           </div>
 
@@ -66,7 +96,7 @@ const Register = () => {
               name="password"
               placeholder="Create a password"
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
           </div>
 
@@ -79,21 +109,25 @@ const Register = () => {
               name="phoneNo"
               placeholder="Enter phone number"
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
           </div>
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-gray-900 transition"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
-          <span className="text-black font-medium cursor-pointer hover:underline">
+          <span
+            className="text-black font-medium cursor-pointer hover:underline"
+            onClick={() => navigate("/login")}
+          >
             Login
           </span>
         </p>

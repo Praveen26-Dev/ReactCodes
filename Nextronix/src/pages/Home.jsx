@@ -11,7 +11,7 @@ const Home = () => {
       <section className="bg-gradient-to-r from-gray-900 to-gray-700 text-white">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Nextronix Electronics
+            Next Gen Electronics
           </h1>
           <p className="text-gray-300 max-w-xl mb-6">
             Buy latest mobiles, laptops, headphones & smart gadgets at best prices.
