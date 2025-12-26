@@ -3,6 +3,10 @@ import api from "../api/axiosInstance";
 
 export const authService = {
     register : (data)=>api.post("/auth/register",data),
+    verifyEmailOtp: (email, otp) =>
+    api.post(`/auth/verify-email-otp?email=${email}&otp=${otp}`),
+    verifyPhoneOtp: (phoneNo, otp) =>
+    api.post(`/auth/verify-phone-otp?phoneNo=${phoneNo}&otp=${otp}`),
     login : (data)=> api.post("/auth/login",data),
     googleLogin:(idToken)=>api.post("/auth/google",{idToken}),
     forgotPassword:(data)=>api.post("/auth/forgot-password",data),

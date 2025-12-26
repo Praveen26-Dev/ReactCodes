@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../api/axiosInstance";
-import '../App.css'
+import { authController } from "../controller/authController";
+
 const VerifyOtp = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const params = new URLSearchParams(location.search);
   const email = params.get("email");
@@ -12,117 +12,100 @@ const VerifyOtp = () => {
 
   const [emailOtp, setEmailOtp] = useState("");
   const [phoneOtp, setPhoneOtp] = useState("");
-
   const [emailVerified, setEmailVerified] = useState(false);
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  // 🔹 Verify Email OTP
-  const verifyEmailOtp = async () => {
-    try {
-      setLoading(true);
-      setMsg("");
-
-      await api.post(
-        `/auth/verify-email-otp?email=${email}&otp=${emailOtp}`
-      );
-
-      setEmailVerified(true);
-      setMsg("Email verified successfully. Now verify phone OTP.");
-
-    } catch (err) {
-      setMsg(err.response?.data?.message || "Email OTP verification failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔹 Verify Phone OTP
-  const verifyPhoneOtp = async () => {
-    try {
-      setLoading(true);
-      setMsg("");
-
-      await api.post(
-        `/auth/verify-phone-otp?phoneNo=${phoneNo}&otp=${phoneOtp}`
-      );
-
-      setMsg("Verification complete! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 1500);
-
-    } catch (err) {
-      setMsg(err.response?.data?.message || "Phone OTP verification failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔒 Safety check
+  // safety
   if (!email || !phoneNo) {
     navigate("/register");
     return null;
   }
 
+  const verifyEmail = async () => {
+    try {
+      setLoading(true);
+      setMsg("");
+
+      await authController.verifyEmailOtp(email, emailOtp);
+
+      setEmailVerified(true);
+      setMsg("Email verified successfully. Now verify phone OTP.");
+
+    } catch (err) {
+      setMsg(err?.response?.data?.message || "Email OTP verification failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyPhone = async () => {
+    try {
+      setLoading(true);
+      setMsg("");
+
+      await authController.verifyPhoneOtp(phoneNo, phoneOtp);
+
+      setMsg("Verification complete! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+
+    } catch (err) {
+      setMsg(err?.response?.data?.message || "Phone OTP verification failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-6 rounded shadow">
-        <h2 className="text-2xl font-bold text-center mb-2">
-          Verify OTP
-        </h2>
-
-        <p className="text-center text-sm text-gray-500 mb-4">
-          OTP sent to your Email & Mobile
-        </p>
+        <h2 className="text-2xl font-bold text-center mb-2">Verify OTP</h2>
 
         {msg && (
-          <p className="text-center mb-4 text-blue-600 text-sm">
-            {msg}
-          </p>
+          <p className="text-center text-sm mb-4 text-blue-600">{msg}</p>
         )}
 
         {/* EMAIL OTP */}
         <div className="mb-4">
-          <label className="text-sm font-medium">Email OTP</label>
+          <label>Email OTP</label>
           <input
             type="text"
             value={emailOtp}
-            onChange={(e) => setEmailOtp(e.target.value)}
             disabled={emailVerified}
+            onChange={(e) => setEmailOtp(e.target.value)}
             className="w-full border p-2 mt-1"
           />
 
           {!emailVerified && (
             <button
-              onClick={verifyEmailOtp}
+              onClick={verifyEmail}
               disabled={loading}
               className="w-full bg-black text-white py-2 mt-2"
             >
-              {loading ? "Verifying..." : "Verify Email OTP"}
+              Verify Email OTP
             </button>
           )}
         </div>
 
         {/* PHONE OTP */}
         <div>
-          <label className="text-sm font-medium">Phone OTP</label>
+          <label>Phone OTP</label>
           <input
             type="text"
             value={phoneOtp}
-            onChange={(e) => setPhoneOtp(e.target.value)}
             disabled={!emailVerified}
+            onChange={(e) => setPhoneOtp(e.target.value)}
             className="w-full border p-2 mt-1"
           />
 
           <button
-            onClick={verifyPhoneOtp}
+            onClick={verifyPhone}
             disabled={!emailVerified || loading}
             className={`w-full py-2 mt-2 text-white ${
-              emailVerified
-                ? "bg-green-600"
-                : "bg-gray-400 cursor-not-allowed"
+              emailVerified ? "bg-green-600" : "bg-gray-400"
             }`}
           >
-            {loading ? "Verifying..." : "Verify Phone OTP"}
+            Verify Phone OTP
           </button>
         </div>
       </div>
