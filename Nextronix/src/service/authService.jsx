@@ -12,6 +12,5 @@ export const authService = {
     forgotPassword:(data)=>api.post("/auth/forgot-password",data),
     resetPassword:(data)=> api.post("/auth/reset-password",data),
     validateToken: (token)=> api.get(`/auth/reset-password/validate?token=${token}`)
-
-
 };
+// 
