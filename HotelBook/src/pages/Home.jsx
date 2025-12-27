@@ -3,65 +3,101 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Features from "../components/Features";
 import { motion } from "framer-motion";
-import "../App.css";
+import WhyChooseUs from "../components/WhyChooseUs";
+import FeaturedRooms from "../components/FeaturedRooms";
+import GuestReviews from "../components/GuestReviews";
+import FinalCTA from "../components/FinalCTA";
 
+import "../App.css";
 const Home = () => {
   return (
     <>
       <Navbar />
 
-      {/* HERO SECTION */}
-      <section
-        className="h-screen w-full relative flex flex-col justify-center items-center text-white px-4 md:px-8 overflow-hidden"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?w=1000&auto=format&fit=crop&q=60')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60"></div>
+      {/* ================= HERO SECTION ================= */}
+      <section className="h-screen w-full relative overflow-hidden">
 
-        <div className="relative z-10 text-center max-w-3xl">
-          {/* Title */}
-          <motion.h1
+        {/* Sliding Background */}
+        <motion.div
+          className="absolute inset-0 flex"
+          animate={{ x: ["0%", "-100%"] }}
+          transition={{
+            duration: 30,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+          style={{ width: "200%" }}
+        >
+          {[
+            "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600",
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1600",
+            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1600",
+            "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600",
+          ].map((img, i) => (
+            <div
+              key={i}
+              className="w-screen h-full flex-shrink-0"
+              style={{
+                backgroundImage: `url(${img})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          ))}
+        </motion.div>
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/65"></div>
+
+        {/* Foreground Content */}
+        <div className="relative z-10 h-full flex items-center justify-center px-6 text-center">
+          <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)]"
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="max-w-3xl"
           >
-            Where Comfort Meets Luxury
-          </motion.h1>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
+              Experience <span className="text-yellow-400">Luxury</span> <br />
+              Beyond Stay
+            </h1>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-            className="text-lg sm:text-xl md:text-2xl mb-6 text-gray-200"
-          >
-            Premium Hotels and Luxury Rooms Waiting For You
-          </motion.p>
+            <p className="mt-5 text-gray-200 text-lg md:text-xl">
+              Handpicked premium hotels, designed for comfort and elegance
+            </p>
 
-          {/* Button */}
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-linear-to-r from-yellow-400 to-yellow-600 text-black px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-yellow-400/40 duration-300 text-sm sm:text-base md:text-lg"
-          >
-            Explore Rooms
-          </motion.button>
+            <div className="mt-6 flex justify-center gap-6 text-gray-300 text-sm md:text-base">
+              <span>⭐ 4.8 Guest Rating</span>
+              <span>🏨 120+ Premium Hotels</span>
+              <span>🌍 40+ Cities</span>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-10 bg-yellow-400 text-black
+                         px-12 py-4 rounded-xl font-bold
+                         shadow-xl hover:shadow-yellow-400/50
+                         transition text-base md:text-lg"
+            >
+              Discover Rooms
+            </motion.button>
+          </motion.div>
         </div>
       </section>
 
-      <Features />
-      <Footer />
+      {/* ================= SECTION 2 ================= */}
+      <WhyChooseUs />
+
+      {/* ================= SECTION 3 ================= */}
+      <FeaturedRooms />
+
+      {/* ================= SECTION 4 ================= */}
+      <GuestReviews />
+
+      {/* ================= SECTION 5 ================= */}
+      <FinalCTA />
     </>
   );
 };
-
 export default Home;

@@ -1,95 +1,50 @@
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import '../App.css'
-const Navbar = () => {
-  const navRef = useRef();
-  const logoRef = useRef();
-  const menuRef = useRef([]);
-  const btnRef = useRef([]);
+import { useEffect, useRef } from "react";
+import { heroIntroAnimation } from "../animations/heroAnimations";
 
-  useGSAP(() => {
-    gsap.from(navRef.current, {
-      y: -70,
-      opacity: 0,
-      duration: 0.9,
-      ease: "power4.out",
-    });
+const Home = () => {
+  const heroRef = useRef(null);
 
-    gsap.from(logoRef.current, {
-      opacity: 0,
-      scale: 0.85,
-      duration: 0.7,
-      delay: 0.2,
-    });
-
-    gsap.from(menuRef.current.filter(Boolean), {
-      opacity: 0,
-      y: -15,
-      stagger: 0.15,
-      duration: 0.5,
-      delay: 0.4,
-    });
-
-    gsap.from(btnRef.current.filter(Boolean), {
-      opacity: 0,
-      scale: 0.9,
-      stagger: 0.2,
-      duration: 0.5,
-      delay: 0.6,
-    });
+  useEffect(() => {
+    heroIntroAnimation(heroRef.current);
   }, []);
 
   return (
-    <nav
-      ref={navRef}
-      className="fixed top-0 w-full z-50 bg-[#333333] shadow-lg border-b border-neutral-800"
+    <section
+      ref={heroRef}
+      className="relative h-screen flex items-center justify-center text-white overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      {/* Background */}
+      <div
+        className="hero-bg absolute inset-0 bg-cover bg-center scale-110"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1501117716987-c8e3f6a3d180')",
+        }}
+      />
 
-        {/* Logo */}
-        <div
-          ref={logoRef}
-          className="text-2xl font-bold text-white tracking-wider"
-        >
-          <Link to="/">StayEase</Link>
-        </div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60" />
 
-        {/* Menu */}
-        <ul className="hidden md:flex gap-8 text-gray-200 font-medium">
-          {["Home", "Hotels", "Deals", "About"].map((item, index) => (
-            <li
-              key={item}
-              ref={(el) => (menuRef.current[index] = el)}
-              className="hover:text-amber-400 transition-colors duration-200"
-            >
-              <Link to={item === "Home" ? "/" : `/${item.toLowerCase()}`}>
-                {item}
-              </Link>
-            </li>
+      {/* Content */}
+      <div className="relative z-10 text-center max-w-3xl px-4">
+        <h1 className="hero-text text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          {"Find Your Perfect Stay".split(" ").map((word, i) => (
+            <span key={i} className="inline-block mr-3">
+              {word}
+            </span>
           ))}
-        </ul>
+        </h1>
 
-        {/* Buttons */}
-        <div className="flex gap-4">
-          <button
-            ref={(el) => (btnRef.current[0] = el)}
-            className="px-4 py-2 rounded-md border border-gray-500 text-gray-200 hover:border-amber-400 hover:text-amber-400 transition-all duration-200"
-          >
-            Login
-          </button>
+        <p className="text-lg text-gray-200 mb-10">
+          Handpicked luxury hotels & resorts worldwide
+        </p>
 
-          <button
-            ref={(el) => (btnRef.current[1] = el)}
-            className="px-4 py-2 rounded-md bg-linear-to-r from-amber-400 to-yellow-500 text-black font-semibold hover:scale-105 transition-transform duration-200"
-          >
-            Sign Up
-          </button>
+        <div className="hero-search bg-white text-black p-5 rounded-2xl shadow-xl">
+          Search hotels by city, country & dates
         </div>
       </div>
-    </nav>
+    </section>
   );
 };
 
-export default Navbar;
+export default Home;
