@@ -17,7 +17,10 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const submitForm = async (e) => {
@@ -34,7 +37,6 @@ const Register = () => {
       navigate(
         `/verify-otp?email=${form.email}&phone=${form.phoneNo}`
       );
-
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {
@@ -45,10 +47,10 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        
         <h2 className="text-3xl font-bold text-center mb-2">
           Create Account
         </h2>
+
         <p className="text-center text-gray-500 mb-6">
           Register to get started
         </p>
@@ -60,7 +62,6 @@ const Register = () => {
         )}
 
         <form onSubmit={submitForm} className="space-y-4">
-          
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Full Name
