@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import { authController } from "../controller/authController";
 
 const Login = () => {
@@ -13,6 +12,8 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  /* ================= NORMAL LOGIN ================= */
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,29 +28,52 @@ const Login = () => {
       const res = await authController.login(form);
       localStorage.setItem("token", res.token);
       navigate("/");
-
     } catch (err) {
       setError(
         err?.response?.data?.message ||
-        "Login failed. Verify email & phone first."
+          "Login failed. Verify email & phone first."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔥 GOOGLE LOGIN
-  const handleGoogleLogin = async (credentialResponse) => {
-    try {
-      const res = await authController.googleLogin(
-        credentialResponse.credential
+  /* ================= GOOGLE LOGIN ================= */
+
+  useEffect(() => {
+    /* global google */
+    if (window.google) {
+      google.accounts.id.initialize({
+        client_id:
+          "765198013342-jnbbei9lc2juduuun7t22msvvndu7nu1.apps.googleusercontent.com",
+        callback: handleGoogleResponse,
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById("googleLogin"),
+        {
+          theme: "outline",
+          size: "large",
+          width: 320,
+        }
       );
-      localStorage.setItem("token", res.token);
+    }
+  }, []);
+
+  const handleGoogleResponse = async (response) => {
+    try {
+      const jwt = await authController.googleLogin(
+        response.credential // 🔥 ID TOKEN
+      );
+
+      localStorage.setItem("token", jwt);
       navigate("/");
     } catch {
       setError("Google login failed");
     }
   };
+
+  /* ================= UI ================= */
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -64,7 +88,7 @@ const Login = () => {
           </p>
         )}
 
-        {/* LOGIN FORM */}
+        {/* ===== NORMAL LOGIN FORM ===== */}
         <form onSubmit={submitLogin} className="space-y-4">
           <input
             type="email"
@@ -82,7 +106,6 @@ const Login = () => {
             className="w-full border p-2"
           />
 
-          {/* 🔥 FORGOT PASSWORD BUTTON */}
           <div className="text-right">
             <button
               type="button"
@@ -101,19 +124,16 @@ const Login = () => {
           </button>
         </form>
 
-        {/* DIVIDER */}
+        {/* ===== DIVIDER ===== */}
         <div className="flex items-center my-4">
           <div className="flex-1 border-t" />
           <span className="px-2 text-gray-400 text-sm">OR</span>
           <div className="flex-1 border-t" />
         </div>
 
-        {/* GOOGLE LOGIN */}
+        {/* ===== GOOGLE LOGIN ===== */}
         <div className="flex justify-center">
-          <GoogleLogin
-            onSuccess={handleGoogleLogin}
-            onError={() => setError("Google Login Failed")}
-          />
+          <div id="googleLogin"></div>
         </div>
       </div>
     </div>

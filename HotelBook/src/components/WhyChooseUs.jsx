@@ -5,6 +5,7 @@ import {
   FaConciergeBell,
   FaStar,
 } from "react-icons/fa";
+import Particles from "./Particles";
 
 const features = [
   {
@@ -52,26 +53,41 @@ const itemVariants = {
 
 const WhyChooseUs = () => {
   return (
-    <section className="h-screen bg-gray-950 text-white flex items-center relative overflow-hidden">
+    <section className="relative min-h-screen bg-gray-950 text-white overflow-hidden flex items-center">
+      
+      {/* 🔥 PARTICLES FULL SECTION */}
+      <div className="absolute inset-0 z-0">
+        <Particles
+          particleColors={["#ffffff", "#ffffff"]}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
 
-      {/* Ambient Background */}
+      {/* Ambient Gradient */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-r 
-                   from-transparent via-yellow-500/5 to-transparent"
+                   from-transparent via-yellow-500/5 to-transparent z-0"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        viewport={{ amount: 0.2 }}   // 👈 runs every time
+        viewport={{ amount: 0.2 }}
       />
 
+      {/* CONTENT */}
       <motion.div
-        className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 relative z-10"
+        className="relative z-10 max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ amount: 0.35 }}   // 👈 NOT once:true
+        viewport={{ amount: 0.35 }}
       >
-        {/* LEFT CONTENT */}
+        {/* LEFT */}
         <motion.div variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
             Why Guests <br />

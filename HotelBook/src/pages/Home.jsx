@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Features from "../components/Features";
+// import Footer from "../components/Footer";
+// import Features from "../components/Features";
 import { motion } from "framer-motion";
 import WhyChooseUs from "../components/WhyChooseUs";
 import FeaturedRooms from "../components/FeaturedRooms";
