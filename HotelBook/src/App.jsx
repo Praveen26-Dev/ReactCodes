@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-
+import Hotels from './pages/Hotels'
 function App() {
   return (
     
@@ -19,6 +19,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/rooms" element={<Hotels />} />
+         <Route path="/book/:id" element={<BookHotel />} />
+      <Route path="/my-bookings" element={<MyBookings />} />
       </Routes>
     </Router>
     </>

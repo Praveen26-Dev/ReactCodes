@@ -75,6 +75,7 @@ const Home = () => {
             <motion.button
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/rooms")}
               className="mt-10 bg-yellow-400 text-black
                          px-12 py-4 rounded-xl font-bold
                          shadow-xl hover:shadow-yellow-400/50

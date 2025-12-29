@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
+    "axios": "^1.13.2",
     "gsap": "^3.14.1",
+    "json-server": "^1.0.0-beta.3",
     "motion": "^12.23.26",
     "ogl": "^1.0.11",
     "react": "^19.2.0",

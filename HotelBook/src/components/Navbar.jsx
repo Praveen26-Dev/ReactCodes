@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // 🔐 Auth state (single source)
+  const user = JSON.parse(localStorage.getItem("authUser"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("authUser");
+    navigate("/");
+  };
 
   return (
     <motion.nav
@@ -19,7 +28,7 @@ const Navbar = () => {
           whileHover={{ scale: 1.04 }}
           className="text-xl sm:text-2xl font-extrabold tracking-wide text-yellow-400 drop-shadow-md"
         >
-          HotelEase
+          <Link to="/">HotelEase</Link>
         </motion.h1>
 
         {/* Desktop Menu */}
@@ -31,34 +40,49 @@ const Navbar = () => {
                 className="cursor-pointer relative group transition"
               >
                 {item}
-                {/* Underline Hover Animation */}
                 <span className="absolute left-0 bottom-0 w-full h-0.5 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
               </motion.li>
             </Link>
           ))}
         </ul>
 
-        {/* Desktop Buttons */}
-        <div className="hidden md:flex gap-3">
-          <Link to="/login">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition"
-            >
-              Login
-            </motion.button>
-          </Link>
+        {/* Desktop Buttons (AUTH AWARE) */}
+        <div className="hidden md:flex gap-3 items-center">
+          {user ? (
+            <>
+              <span className="font-medium">Hi, {user.name}</span>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleLogout}
+                className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
+              >
+                Logout
+              </motion.button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition"
+                >
+                  Login
+                </motion.button>
+              </Link>
 
-          <Link to="/signup">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
-            >
-              Sign Up
-            </motion.button>
-          </Link>
+              <Link to="/signup">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
+                >
+                  Sign Up
+                </motion.button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -121,24 +145,40 @@ const Navbar = () => {
                 </Link>
               ))}
 
+              {/* Mobile Auth Buttons */}
               <div className="flex flex-col gap-3 mt-3">
-                <Link to="/login">
+                {user ? (
                   <motion.button
                     whileHover={{ scale: 1.08 }}
-                    className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition"
-                  >
-                    Login
-                  </motion.button>
-                </Link>
-
-                <Link to="/signup">
-                  <motion.button
-                    whileHover={{ scale: 1.08 }}
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
                     className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
                   >
-                    Sign Up
+                    Logout
                   </motion.button>
-                </Link>
+                ) : (
+                  <>
+                    <Link to="/login" onClick={() => setIsOpen(false)}>
+                      <motion.button
+                        whileHover={{ scale: 1.08 }}
+                        className="px-4 py-2 border border-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition"
+                      >
+                        Login
+                      </motion.button>
+                    </Link>
+
+                    <Link to="/signup" onClick={() => setIsOpen(false)}>
+                      <motion.button
+                        whileHover={{ scale: 1.08 }}
+                        className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
+                      >
+                        Sign Up
+                      </motion.button>
+                    </Link>
+                  </>
+                )}
               </div>
             </ul>
           </motion.div>

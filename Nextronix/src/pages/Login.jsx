@@ -5,8 +5,9 @@ import { authController } from "../controller/authController";
 const Login = () => {
   const navigate = useNavigate();
 
+  // 🔥 email -> identifier
   const [form, setForm] = useState({
-    email: "",
+    identifier: "", // email / phone / username
     password: "",
   });
 
@@ -26,12 +27,14 @@ const Login = () => {
       setError("");
 
       const res = await authController.login(form);
-      localStorage.setItem("token", res.token);
+
+      // 🔥 backend JWT string return kar raha hai
+      localStorage.setItem("token", res);
+
       navigate("/");
     } catch (err) {
       setError(
-        err?.response?.data?.message ||
-          "Login failed. Verify email & phone first."
+        err?.response?.data?.message || "Invalid credentials"
       );
     } finally {
       setLoading(false);
@@ -91,19 +94,23 @@ const Login = () => {
         {/* ===== NORMAL LOGIN FORM ===== */}
         <form onSubmit={submitLogin} className="space-y-4">
           <input
-            type="email"
-            name="email"
-            placeholder="Email"
+            type="text"
+            name="identifier"
+            placeholder="Email / Phone / Username"
+            value={form.identifier}
             onChange={handleChange}
             className="w-full border p-2"
+            required
           />
 
           <input
             type="password"
             name="password"
             placeholder="Password"
+            value={form.password}
             onChange={handleChange}
             className="w-full border p-2"
+            required
           />
 
           <div className="text-right">

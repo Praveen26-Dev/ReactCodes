@@ -1,0 +1,123 @@
+{
+  "users": [
+    {
+      "id": "85f1",
+      "name": "praveen",
+      "email": "pandeypraveen32259@gmail.com",
+      "password": "123456",
+      "contact": "12345",
+      "city": "BHOPAL"
+    }
+  ],
+  "hotels": [
+    {
+      "id": 1,
+      "name": "Ocean View Resort",
+      "city": "Goa",
+      "country": "India",
+      "price": 4500,
+      "rating": 4.6,
+      "image": "/hotels/hotel1.avif"
+    },
+    {
+      "id": 2,
+      "name": "Royal Palace Hotel",
+      "city": "Jaipur",
+      "country": "India",
+      "price": 5200,
+      "rating": 4.5,
+      "image": "/hotels/hotel2.avif"
+    },
+    {
+      "id": 3,
+      "name": "Mountain Bliss Retreat",
+      "city": "Manali",
+      "country": "India",
+      "price": 3800,
+      "rating": 4.4,
+      "image": "/hotels/hotel3.avif"
+    },
+    {
+      "id": 4,
+      "name": "City Lights Business Hotel",
+      "city": "Mumbai",
+      "country": "India",
+      "price": 6200,
+      "rating": 4.7,
+      "image": "/hotels/hotel4.avif"
+    },
+    {
+      "id": 5,
+      "name": "Lake View Heritage Stay",
+      "city": "Udaipur",
+      "country": "India",
+      "price": 5000,
+      "rating": 4.6,
+      "image": "/hotels/hotel6.avif"
+    },
+    {
+      "id": 6,
+      "name": "Tech Park Residency",
+      "city": "Bangalore",
+      "country": "India",
+      "price": 4300,
+      "rating": 4.3,
+      "image": "/hotels/hotel6.avif"
+    },
+    {
+      "id": 7,
+      "name": "Eiffel View Boutique Hotel",
+      "city": "Paris",
+      "country": "France",
+      "price": 9800,
+      "rating": 4.8,
+      "image": "/hotels/hotel7.jpeg"
+    },
+    {
+      "id": 8,
+      "name": "Times Square Luxury Inn",
+      "city": "New York",
+      "country": "USA",
+      "price": 10500,
+      "rating": 4.7,
+      "image": "/hotels/hotel8.avif"
+    },
+    {
+      "id": 9,
+      "name": "Santorini Cliffside Resort",
+      "city": "Santorini",
+      "country": "Greece",
+      "price": 11200,
+      "rating": 4.9,
+      "image": "/hotels/hotel9.avif"
+    },
+    {
+      "id": 10,
+      "name": "Tokyo Central Capsule Hotel",
+      "city": "Tokyo",
+      "country": "Japan",
+      "price": 7600,
+      "rating": 4.5,
+      "image": "/hotels/hotel8.avif"
+    },
+    {
+      "id": 11,
+      "name": "Dubai Marina Luxury Suites",
+      "city": "Dubai",
+      "country": "UAE",
+      "price": 11500,
+      "rating": 4.8,
+      "image": "/hotels/hotel11.avif"
+    },
+    {
+      "id": 12,
+      "name": "Swiss Alps Mountain Lodge",
+      "city": "Zermatt",
+      "country": "Switzerland",
+      "price": 12500,
+      "rating": 4.9,
+      "image": "/hotels/hotel11.avif"
+    }
+  ],
+  "bookings": []
+}

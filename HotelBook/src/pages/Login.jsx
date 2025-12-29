@@ -8,18 +8,50 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [shake, setShake] = useState(false);
 
-  const handleLogin = (e) => {
+  // 🔹 LOGIN HANDLER (JSON-SERVER BASED)
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const user = JSON.parse(localStorage.getItem("hotelUser"));
+    try {
+      // 🔎 1. Get user from json-server by email
+      const res = await fetch(
+        `http://localhost:5000/users?email=${email}`
+      );
+      const users = await res.json();
 
-    if (user && user.email === email && user.password === password) {
-      alert(`Login Successful!\nWelcome, ${user.name}`);
+      // ❌ User not found
+      if (users.length === 0) {
+        setShake(true);
+        setTimeout(() => setShake(false), 400);
+        alert("User not found. Please signup.");
+        return;
+      }
+
+      const user = users[0];
+
+      // ❌ Wrong password
+      if (user.password !== password) {
+        setShake(true);
+        setTimeout(() => setShake(false), 400);
+        alert("Invalid password");
+        return;
+      }
+
+      // 🔐 2. Save LOGIN STATE ONLY (safe data)
+      localStorage.setItem(
+        "authUser",
+        JSON.stringify({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        })
+      );
+
+      // ✅ 3. Redirect to HOME
       navigate("/");
-    } else {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-      navigate("/signup");
+    } catch (error) {
+      console.error(error);
+      alert("Login failed. Please try again.");
     }
   };
 
@@ -37,17 +69,12 @@ const Login = () => {
         <motion.div
           key="login-card"
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          animate={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className={`bg-white/90 backdrop-blur-lg p-8 rounded-xl shadow-2xl w-[90%] max-w-md 
             ${shake ? "shake-effect" : ""}`}
         >
-          {/* Animated Heading */}
           <motion.h2
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -93,7 +120,7 @@ const Login = () => {
         </motion.div>
       </AnimatePresence>
 
-      {/* Shake animation */}
+      {/* Shake animation (unchanged) */}
       <style>
         {`
           .shake-effect {
