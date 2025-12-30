@@ -7,6 +7,22 @@
       "password": "123456",
       "contact": "12345",
       "city": "BHOPAL"
+    },
+    {
+      "id": "cda4",
+      "name": "Chacha",
+      "email": "praveen090@gmal.com",
+      "password": "098709",
+      "contact": "1234512345",
+      "city": "BHOPAL"
+    },
+    {
+      "id": "7617",
+      "name": "praveen",
+      "email": "pandeypraveen59@gmail.com",
+      "password": "765765",
+      "contact": "0987667890",
+      "city": "delhi"
     }
   ],
   "hotels": [
@@ -128,6 +144,26 @@
       "checkOut": "2026-01-05",
       "guests": "2",
       "price": 4500,
+      "idType": "Aadhar"
+    },
+    {
+      "id": "e875",
+      "hotelId": "2",
+      "hotelName": "Royal Palace Hotel",
+      "checkIn": "2025-12-31",
+      "checkOut": "2026-01-02",
+      "guests": "4",
+      "price": 5200,
+      "idType": "Aadhar"
+    },
+    {
+      "id": "2f39",
+      "hotelId": "2",
+      "hotelName": "Royal Palace Hotel",
+      "checkIn": "2026-01-08",
+      "checkOut": "2026-01-11",
+      "guests": "2",
+      "price": 5200,
       "idType": "Aadhar"
     }
   ]

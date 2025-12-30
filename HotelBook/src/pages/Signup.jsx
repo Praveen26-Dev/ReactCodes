@@ -1,53 +1,91 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm();
+  /* ================= FORM STATE ================= */
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    contact: "",
+    city: "",
+  });
 
-  const password = watch("password");
+  const [errors, setErrors] = useState({});
 
-  // 🔹 Submit handler (JSON-SERVER BASED – FIXED)
-  const onSubmit = async (data) => {
-    const { confirmPassword, ...userData } = data;
+  /* ================= HANDLERS ================= */
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  /* ================= VALIDATION ================= */
+  const validate = () => {
+    let err = {};
+
+    if (!form.name.trim()) err.name = "Full Name is required";
+
+    if (!form.email.trim()) {
+      err.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      err.email = "Invalid email format";
+    }
+
+    if (!form.password) {
+      err.password = "Password is required";
+    } else if (form.password.length < 6) {
+      err.password = "Minimum 6 characters required";
+    }
+
+    if (!form.confirmPassword) {
+      err.confirmPassword = "Confirm password is required";
+    } else if (form.password !== form.confirmPassword) {
+      err.confirmPassword = "Passwords do not match";
+    }
+
+    if (!form.contact.trim()) {
+      err.contact = "Contact is required";
+    } else if (!/^[0-9]{10}$/.test(form.contact)) {
+      err.contact = "Enter 10 digit number";
+    }
+
+    if (!form.city.trim()) err.city = "City is required";
+
+    setErrors(err);
+    return Object.keys(err).length === 0;
+  };
+
+  /* ================= SUBMIT ================= */
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const { confirmPassword, ...userData } = form;
 
     try {
-      // 🔎 1. Check if email already exists
-      const checkRes = await fetch(
-        `http://localhost:5000/users?email=${userData.email}`
+      // 🔍 1. Check existing email
+      const checkRes = await axios.get(
+        `http://localhost:3000/users?email=${userData.email}`
       );
-      const existingUsers = await checkRes.json();
 
-      if (existingUsers.length > 0) {
-        alert("Email already registered. Please login.");
+      if (checkRes.data.length > 0) {
+        alert("Email already registered");
         return;
       }
 
-      // 📦 2. Save user to json-server
-      const res = await fetch("http://localhost:5000/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      // 📦 2. Save user
+      const res = await axios.post(
+        "http://localhost:3000/users",
+        userData
+      );
 
-      if (!res.ok) {
-        throw new Error("Failed to register");
-      }
+      const savedUser = res.data;
 
-      const savedUser = await res.json();
-
-      // 🔐 3. Save LOGIN STATE only (NO password)
+      // 🔐 3. Save login state
       localStorage.setItem(
         "authUser",
         JSON.stringify({
@@ -57,146 +95,91 @@ const Signup = () => {
         })
       );
 
-      reset();
-      navigate("/"); // ✅ HOME REDIRECT
-    } catch (error) {
-      console.error(error);
-      alert("Signup failed. Please try again.");
+      navigate("/");
+    } catch (err) {
+      alert("Signup failed");
     }
   };
 
-  // 🔹 Animation variants
-  const fieldVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({
+  /* ================= ANIMATIONS ================= */
+  const containerVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.1, duration: 0.4 },
-    }),
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.12,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const fieldVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.35, ease: "easeOut" },
+    },
   };
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen p-4"
+      className="flex items-center justify-center min-h-screen px-4"
       style={{
         backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1470&q=80')`,
+        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
       <motion.div
-        initial={{ opacity: 0, y: 60, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="bg-white/90 backdrop-blur-lg p-8 rounded-xl shadow-2xl w-[90%] max-w-md"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-white/90 backdrop-blur-lg p-8 rounded-xl shadow-2xl w-full max-w-md"
       >
         <motion.h2
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          variants={fieldVariants}
           className="text-3xl font-bold mb-6 text-center text-gray-800"
         >
           Create Account
         </motion.h2>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-          <motion.input
-            variants={fieldVariants}
-            initial="hidden"
-            animate="visible"
-            custom={0}
-            placeholder="Full Name"
-            {...register("name", { required: "Full Name is required" })}
-            className="p-3 rounded border border-gray-300"
-          />
-          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-
-          <motion.input
-            variants={fieldVariants}
-            initial="hidden"
-            animate="visible"
-            custom={1}
-            type="email"
-            placeholder="Email Address"
-            {...register("email", { required: "Email is required" })}
-            className="p-3 rounded border border-gray-300"
-          />
-          {errors.email && (
-            <p className="text-red-500">{errors.email.message}</p>
-          )}
-
-          <motion.input
-            variants={fieldVariants}
-            initial="hidden"
-            animate="visible"
-            custom={2}
-            type="password"
-            placeholder="Password"
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
-              },
-            })}
-            className="p-3 rounded border border-gray-300"
-          />
-          {errors.password && (
-            <p className="text-red-500">{errors.password.message}</p>
-          )}
-
-          <motion.input
-            variants={fieldVariants}
-            initial="hidden"
-            animate="visible"
-            custom={3}
-            type="password"
-            placeholder="Confirm Password"
-            {...register("confirmPassword", {
-              required: "Confirm Password is required",
-              validate: (value) =>
-                value === password || "Passwords do not match",
-            })}
-            className="p-3 rounded border border-gray-300"
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-500">
-              {errors.confirmPassword.message}
-            </p>
-          )}
-
-          <motion.input
-            variants={fieldVariants}
-            initial="hidden"
-            animate="visible"
-            custom={4}
-            placeholder="Contact Number"
-            {...register("contact", { required: "Contact is required" })}
-            className="p-3 rounded border border-gray-300"
-          />
-          {errors.contact && (
-            <p className="text-red-500">{errors.contact.message}</p>
-          )}
-
-          <motion.input
-            variants={fieldVariants}
-            initial="hidden"
-            animate="visible"
-            custom={5}
-            placeholder="City"
-            {...register("city", { required: "City is required" })}
-            className="p-3 rounded border border-gray-300"
-          />
-          {errors.city && (
-            <p className="text-red-500">{errors.city.message}</p>
-          )}
+        <form onSubmit={onSubmit} className="flex flex-col gap-3">
+          {[
+            ["name", "Full Name"],
+            ["email", "Email Address"],
+            ["password", "Password", "password"],
+            ["confirmPassword", "Confirm Password", "password"],
+            ["contact", "Contact Number"],
+            ["city", "City"],
+          ].map(([name, placeholder, type]) => (
+            <motion.div key={name} variants={fieldVariants}>
+              <input
+                type={type || "text"}
+                name={name}
+                value={form[name]}
+                onChange={handleChange}
+                placeholder={placeholder}
+                className="p-3 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+              {errors[name] && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors[name]}
+                </p>
+              )}
+            </motion.div>
+          ))}
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            variants={fieldVariants}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             type="submit"
-            className="bg-yellow-400 p-3 rounded font-bold hover:bg-yellow-500"
+            className="bg-yellow-400 p-3 mt-4 rounded font-bold hover:bg-yellow-500"
           >
             Sign Up
           </motion.button>

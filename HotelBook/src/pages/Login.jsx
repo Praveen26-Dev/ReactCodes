@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-
+import axios from 'axios'
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -9,52 +9,53 @@ const Login = () => {
   const [shake, setShake] = useState(false);
 
   // 🔹 LOGIN HANDLER (JSON-SERVER BASED)
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  // 🔹 LOGIN HANDLER (JSON-SERVER BASED)
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    try {
-      // 🔎 1. Get user from json-server by email
-      const res = await fetch(
-        `http://localhost:5000/users?email=${email}`
-      );
-      const users = await res.json();
+  try {
+    // 🔎 1. Get user by email
+    const res = await axios.get(
+      `http://localhost:3000/users?email=${email}`
+    );
 
-      // ❌ User not found
-      if (users.length === 0) {
-        setShake(true);
-        setTimeout(() => setShake(false), 400);
-        alert("User not found. Please signup.");
-        return;
-      }
+    const users = res.data;
 
-      const user = users[0];
-
-      // ❌ Wrong password
-      if (user.password !== password) {
-        setShake(true);
-        setTimeout(() => setShake(false), 400);
-        alert("Invalid password");
-        return;
-      }
-
-      // 🔐 2. Save LOGIN STATE ONLY (safe data)
-      localStorage.setItem(
-        "authUser",
-        JSON.stringify({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-        })
-      );
-
-      // ✅ 3. Redirect to HOME
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      alert("Login failed. Please try again.");
+    // ❌ User not found
+    if (users.length === 0) {
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
+      alert("User not found. Please signup.");
+      return;
     }
-  };
 
+    const user = users[0];
+
+    // ❌ Wrong password
+    if (user.password !== password) {
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
+      alert("Invalid password");
+      return;
+    }
+
+    // 🔐 2. Save LOGIN STATE (safe data only)
+    localStorage.setItem(
+      "authUser",
+      JSON.stringify({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      })
+    );
+
+    // ✅ 3. Redirect to HOME
+    navigate("/");
+  } catch (error) {
+    console.error(error);
+    alert("Login failed. Please try again.");
+  }
+};
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen p-4"

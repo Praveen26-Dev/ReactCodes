@@ -9,7 +9,9 @@ import GuestReviews from "../components/GuestReviews";
 import FinalCTA from "../components/FinalCTA";
 
 import "../App.css";
+import { Link,useNavigate } from "react-router-dom";
 const Home = () => {
+  const navigate =useNavigate()
   return (
     <>
       <Navbar />
@@ -71,7 +73,7 @@ const Home = () => {
               <span>🏨 120+ Premium Hotels</span>
               <span>🌍 40+ Cities</span>
             </div>
-
+            <Link to='/rooms'>
             <motion.button
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
@@ -83,6 +85,7 @@ const Home = () => {
             >
               Discover Rooms
             </motion.button>
+            </Link>
           </motion.div>
         </div>
       </section>
