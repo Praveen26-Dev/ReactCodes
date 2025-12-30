@@ -8,6 +8,9 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Hotels from './pages/Hotels'
+import BookHotel from "./pages/BookHotel";
+import MyBookings from './pages/MyBookings'
+import DataPage from "./pages/DataPage";
 function App() {
   return (
     
@@ -21,7 +24,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/rooms" element={<Hotels />} />
          <Route path="/book/:id" element={<BookHotel />} />
-      <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/data" element={<DataPage />} />
+
       </Routes>
     </Router>
     </>

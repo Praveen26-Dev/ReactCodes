@@ -1,6 +1,9 @@
 import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const HotelCard = ({ hotel }) => {
+  const navigate = useNavigate();
+
   return (
     <div
       className="
@@ -13,7 +16,7 @@ const HotelCard = ({ hotel }) => {
       "
     >
       {/* Image */}
-      <div className="h-52 overflow-hidden">
+      <div className="h-52 overflow-hidden relative">
         <img
           src={hotel.image}
           alt={hotel.name}
@@ -22,6 +25,11 @@ const HotelCard = ({ hotel }) => {
           }}
           className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
         />
+
+        {/* Rating badge on image */}
+        <div className="absolute top-3 right-3 bg-black/70 text-yellow-400 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+          <FaStar /> {hotel.rating}
+        </div>
       </div>
 
       {/* Content */}
@@ -42,21 +50,19 @@ const HotelCard = ({ hotel }) => {
           </p>
 
           <button
+            onClick={() => navigate(`/book/${hotel.id}`)}
             className="
               px-4 py-2 rounded-lg
               bg-gradient-to-r from-cyan-400 to-emerald-400
               text-black font-semibold
               hover:scale-105
+              active:scale-95
               transition
             "
           >
-            View Details
+            Book Now
           </button>
         </div>
-
-        <p className="flex items-center gap-1 text-sm text-yellow-400 mt-3">
-          <FaStar /> {hotel.rating}
-        </p>
       </div>
     </div>
   );

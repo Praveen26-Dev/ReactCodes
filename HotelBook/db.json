@@ -11,7 +11,7 @@
   ],
   "hotels": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Ocean View Resort",
       "city": "Goa",
       "country": "India",
@@ -20,7 +20,7 @@
       "image": "/hotels/hotel1.avif"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Royal Palace Hotel",
       "city": "Jaipur",
       "country": "India",
@@ -29,7 +29,7 @@
       "image": "/hotels/hotel2.avif"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Mountain Bliss Retreat",
       "city": "Manali",
       "country": "India",
@@ -38,7 +38,7 @@
       "image": "/hotels/hotel3.avif"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "City Lights Business Hotel",
       "city": "Mumbai",
       "country": "India",
@@ -47,7 +47,7 @@
       "image": "/hotels/hotel4.avif"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Lake View Heritage Stay",
       "city": "Udaipur",
       "country": "India",
@@ -56,7 +56,7 @@
       "image": "/hotels/hotel6.avif"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Tech Park Residency",
       "city": "Bangalore",
       "country": "India",
@@ -65,7 +65,7 @@
       "image": "/hotels/hotel6.avif"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Eiffel View Boutique Hotel",
       "city": "Paris",
       "country": "France",
@@ -74,7 +74,7 @@
       "image": "/hotels/hotel7.jpeg"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Times Square Luxury Inn",
       "city": "New York",
       "country": "USA",
@@ -83,7 +83,7 @@
       "image": "/hotels/hotel8.avif"
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Santorini Cliffside Resort",
       "city": "Santorini",
       "country": "Greece",
@@ -92,7 +92,7 @@
       "image": "/hotels/hotel9.avif"
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Tokyo Central Capsule Hotel",
       "city": "Tokyo",
       "country": "Japan",
@@ -101,7 +101,7 @@
       "image": "/hotels/hotel8.avif"
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "Dubai Marina Luxury Suites",
       "city": "Dubai",
       "country": "UAE",
@@ -110,7 +110,7 @@
       "image": "/hotels/hotel11.avif"
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "Swiss Alps Mountain Lodge",
       "city": "Zermatt",
       "country": "Switzerland",
@@ -119,5 +119,16 @@
       "image": "/hotels/hotel11.avif"
     }
   ],
-  "bookings": []
+  "bookings": [
+    {
+      "id": "83e0",
+      "hotelId": "1",
+      "hotelName": "Ocean View Resort",
+      "checkIn": "2026-01-01",
+      "checkOut": "2026-01-05",
+      "guests": "2",
+      "price": 4500,
+      "idType": "Aadhar"
+    }
+  ]
 }

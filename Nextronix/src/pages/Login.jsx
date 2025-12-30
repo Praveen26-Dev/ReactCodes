@@ -5,9 +5,8 @@ import { authController } from "../controller/authController";
 const Login = () => {
   const navigate = useNavigate();
 
-  // 🔥 email -> identifier
   const [form, setForm] = useState({
-    identifier: "", // email / phone / username
+    identifier: "",
     password: "",
   });
 
@@ -27,15 +26,10 @@ const Login = () => {
       setError("");
 
       const res = await authController.login(form);
-
-      // 🔥 backend JWT string return kar raha hai
       localStorage.setItem("token", res);
-
       navigate("/");
     } catch (err) {
-      setError(
-        err?.response?.data?.message || "Invalid credentials"
-      );
+      setError(err?.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
@@ -55,9 +49,9 @@ const Login = () => {
       google.accounts.id.renderButton(
         document.getElementById("googleLogin"),
         {
-          theme: "outline",
+          theme: "filled_black", // 🔥 dark theme
           size: "large",
-          width: 320,
+          width: 280,
         }
       );
     }
@@ -65,10 +59,7 @@ const Login = () => {
 
   const handleGoogleResponse = async (response) => {
     try {
-      const jwt = await authController.googleLogin(
-        response.credential // 🔥 ID TOKEN
-      );
-
+      const jwt = await authController.googleLogin(response.credential);
       localStorage.setItem("token", jwt);
       navigate("/");
     } catch {
@@ -79,53 +70,65 @@ const Login = () => {
   /* ================= UI ================= */
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-6 rounded shadow">
-        <h2 className="text-2xl font-bold text-center mb-4">
-          Login
+    <div className="min-h-screen flex items-center justify-center px-4
+      bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
+
+      <div className="w-full max-w-sm
+        bg-white/5 backdrop-blur-xl border border-white/10
+        rounded-2xl shadow-2xl p-5 sm:p-6">
+
+        {/* Heading */}
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center">
+          <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+            Welcome Back
+          </span>
         </h2>
 
+        <p className="text-center text-gray-400 mt-1 mb-5 text-sm">
+          Login to your account
+        </p>
+
         {error && (
-          <p className="text-center text-red-500 mb-3 text-sm">
+          <p className="text-red-400 text-center mb-3 text-sm">
             {error}
           </p>
         )}
 
-        {/* ===== NORMAL LOGIN FORM ===== */}
-        <form onSubmit={submitLogin} className="space-y-4">
-          <input
+        {/* ===== FORM ===== */}
+        <form onSubmit={submitLogin} className="space-y-3">
+          <Input
             type="text"
             name="identifier"
             placeholder="Email / Phone / Username"
             value={form.identifier}
             onChange={handleChange}
-            className="w-full border p-2"
-            required
           />
 
-          <input
+          <Input
             type="password"
             name="password"
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            className="w-full border p-2"
-            required
           />
 
+          {/* Forgot password */}
           <div className="text-right">
             <button
               type="button"
               onClick={() => navigate("/forgot-password")}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-xs text-yellow-400 hover:underline"
             >
               Forgot Password?
             </button>
           </div>
 
           <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-2"
+            className="w-full py-2 rounded-xl font-semibold text-black
+            bg-gradient-to-r from-yellow-400 to-orange-500
+            hover:scale-105 transition disabled:opacity-60"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
@@ -133,18 +136,51 @@ const Login = () => {
 
         {/* ===== DIVIDER ===== */}
         <div className="flex items-center my-4">
-          <div className="flex-1 border-t" />
-          <span className="px-2 text-gray-400 text-sm">OR</span>
-          <div className="flex-1 border-t" />
+          <div className="flex-1 border-t border-white/10" />
+          <span className="px-3 text-gray-400 text-xs">OR</span>
+          <div className="flex-1 border-t border-white/10" />
         </div>
 
         {/* ===== GOOGLE LOGIN ===== */}
-        <div className="flex justify-center">
-          <div id="googleLogin"></div>
+        <div className="mt-2">
+          <p className="text-center text-xs tracking-wide text-gray-400 mb-2">
+            OR CONTINUE WITH
+          </p>
+
+          <div className="flex justify-center">
+            <div id="googleLogin"></div>
+          </div>
         </div>
+
+        {/* Footer */}
+        <p className="text-center text-xs text-gray-400 mt-5">
+          Don’t have an account?{" "}
+          <span
+            className="text-yellow-400 font-medium cursor-pointer hover:underline"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </span>
+        </p>
       </div>
     </div>
   );
 };
+
+/* ================= INPUT ================= */
+const Input = ({ type, name, placeholder, value, onChange }) => (
+  <input
+    type={type}
+    name={name}
+    placeholder={placeholder}
+    value={value}
+    onChange={onChange}
+    className="w-full px-4 py-2 rounded-xl
+    bg-black/60 text-white placeholder-gray-400
+    border border-white/10
+    focus:outline-none focus:ring-2 focus:ring-yellow-400"
+    required
+  />
+);
 
 export default Login;
