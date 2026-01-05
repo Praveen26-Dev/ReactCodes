@@ -1,12 +1,12 @@
 import React from 'react'
-import './Tailwind.css'
-import Navbar from './Navbar'
+import TodoList from '../Components/TodoApp/TodoList/TodoList'
+import AddTodo from '../Components/TodoApp/AddTodo/AddTodo'
 function App() {
   return (
-    <div >
-     hello from App
-     
-    </div>
+    <>
+     <AddTodo/>
+     <TodoList/>
+    </>
   )
 }
 
