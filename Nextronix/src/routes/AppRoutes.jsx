@@ -8,11 +8,7 @@ import ForgotPassword from "../pages/ForgotPassword";
 import Cart from '../pages/Cart'
 import Profile from "../pages/Profile";
 import '../App.css'
-import SellerLayout from "../pages/seller/SellerLayout";
-import Categories from "../pages/seller/Categories"
-import Products from "../pages/seller/Products"
-import Variants from "../pages/seller/Variants"
-import Attributes from "../pages/seller/Attributes"
+import CreateProductPage from "../pages/seller/CreateProductPage";
 
 const AppRoutes = () => {
   return (
@@ -25,17 +21,8 @@ const AppRoutes = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/profile" element={<Profile />} />
-    
-      {/* ===== SELLER ROUTES ===== */}
-      <Route path="/seller" element={<SellerLayout />}>
-        <Route path="categories" element={<Categories />} />
-        <Route path="attributes" element={<Attributes />} />
-        <Route path="products" element={<Products />} />
-        <Route
-          path="products/:productId/variants"
-          element={<Variants />}
-        />
-      </Route>
+      <Route path="/seller/create-product" element={<CreateProductPage />} />
+
     </Routes>
   );
 };

@@ -3,7 +3,7 @@ import HeroBanner from "../components/HeroBanner";
 import DealsRow from "../components/DealsRow";
 import ProductGrid from "../components/ProductGrid";
 import Sidebar from "../components/SideBar";
-
+import '../App.css'
 const Home = () => {
   return (
     // 🔥 REMOVED min-h-screen

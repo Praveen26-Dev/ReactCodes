@@ -1,59 +1,122 @@
-import { sellerService } from "../service/sellerService";
+// src/seller/controllers/sellerController.jsx
+import sellerService from "../service/sellerService";
 
-export const sellerController = {
+const sellerController = {
 
-  /* ========== CATEGORY (TEMP: SELLER / LATER ADMIN) ========== */
-  async createCategoriesBulk(data) {
-    const res = await sellerService.createCategoriesBulk(data);
+  /* ================= CATEGORY ================= */
+
+  getCategories: async () => {
+    const res = await sellerService.getCategories();
     return res.data;
   },
 
-  // Breadcrumb → buyer-side usage
-  async getCategoryBreadcrumb(categoryId) {
+  getCategoryBreadcrumb: async (categoryId) => {
     const res = await sellerService.getCategoryBreadcrumb(categoryId);
     return res.data;
   },
 
-  /* ========== ATTRIBUTE ========== */
-  async createAttribute(data) {
-    const res = await sellerService.createAttribute(data);
+  /* ================= BRAND ================= */
+
+  getBrands: async () => {
+    const res = await sellerService.getBrands();
     return res.data;
   },
 
-  async getAttributes() {
-    const res = await sellerService.getAttributes();
-    return res.data;
-  },
+  /* ================= PRODUCT ================= */
 
-  async getAttributeById(id) {
-    const res = await sellerService.getAttributeById(id);
-    return res.data;
-  },
-
-  /* ========== PRODUCT ========== */
-  async createProduct(data) {
+  createProduct: async (data) => {
     const res = await sellerService.createProduct(data);
     return res.data;
   },
 
-  async getProducts() {
-    const res = await sellerService.getProducts();
-    return res.data;
-  },
-
-  async getProductBySlug(slug) {
+  getProductBySlug: async (slug) => {
     const res = await sellerService.getProductBySlug(slug);
     return res.data;
   },
 
-  /* ========== VARIANT ========== */
-  async createVariant(productId, data) {
+  getProductById: async (id) => {
+    const res = await sellerService.getProductById(id);
+    return res.data;
+  },
+
+  /* ================= FEATURES ================= */
+
+  saveFeatures: async (productId, features) => {
+    const res = await sellerService.saveFeatures(productId, features);
+    return res.data;
+  },
+
+  getFeatures: async (productId) => {
+    const res = await sellerService.getFeatures(productId);
+    return res.data;
+  },
+
+  /* ================= ATTRIBUTES ================= */
+
+  getAllAttributes: async () => {
+    const res = await sellerService.getAllAttributes();
+    return res.data;
+  },
+
+  getAttributeById: async (id) => {
+    const res = await sellerService.getAttributeById(id);
+    return res.data;
+  },
+
+  addProductAttributes: async (productId, data) => {
+    const res = await sellerService.addProductAttributes(productId, data);
+    return res.data;
+  },
+
+  /* ================= VARIANTS ================= */
+
+  createVariant: async (productId, data) => {
     const res = await sellerService.createVariant(productId, data);
     return res.data;
   },
 
-  async getVariantsByProduct(productId) {
-    const res = await sellerService.getVariantsByProduct(productId);
+  getVariants: async (productId) => {
+    const res = await sellerService.getVariants(productId);
     return res.data;
-  }
+  },
+
+  /* ================= VARIANT PRICING ================= */
+
+  setVariantPrice: async (variantId, data) => {
+    const res = await sellerService.setVariantPrice(variantId, data);
+    return res.data;
+  },
+
+  setVariantDiscount: async (variantId, data) => {
+    const res = await sellerService.setVariantDiscount(variantId, data);
+    return res.data;
+  },
+
+  getVariantPricing: async (variantId) => {
+    const res = await sellerService.getVariantPricing(variantId);
+    return res.data;
+  },
+
+  /* ================= PRODUCT IMAGES ================= */
+
+  uploadProductImages: async (productId, variantId, files) => {
+    const res = await sellerService.uploadProductImages(
+      productId,
+      variantId,
+      files
+    );
+    return res.data;
+  },
+
+  setPrimaryImage: async (productId, imageId) => {
+    const res = await sellerService.setPrimaryImage(productId, imageId);
+    return res.data;
+  },
+
+  getProductImages: async (productId, variantId) => {
+    const res = await sellerService.getProductImages(productId, variantId);
+    return res.data;
+  },
 };
+
+export default sellerController;
