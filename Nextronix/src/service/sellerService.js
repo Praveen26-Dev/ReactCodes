@@ -43,8 +43,8 @@ const sellerService = {
   getAttributeById: (id) =>
     api.get(`/api/attributes/${id}`),
 
-  addProductAttributes: (productId, data) =>
-    api.post(`/api/products/${productId}/attributes`, data),
+ createAttribute: (data) =>
+  api.post("/api/attributes", data),
 
   /* ================= VARIANTS ================= */
 

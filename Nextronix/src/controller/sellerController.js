@@ -63,10 +63,10 @@ const sellerController = {
     return res.data;
   },
 
-  addProductAttributes: async (productId, data) => {
-    const res = await sellerService.addProductAttributes(productId, data);
-    return res.data;
-  },
+  createAttribute: async (data) => {
+  const res = await sellerService.createAttribute(data);
+  return res.data;
+},
 
   /* ================= VARIANTS ================= */
 

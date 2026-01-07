@@ -1,4 +1,3 @@
-// src/seller/context/SellerProductContext.jsx
 import { createContext, useContext, useState } from "react";
 
 const SellerProductContext = createContext(null);
@@ -14,6 +13,9 @@ export const SellerProductProvider = ({ children }) => {
   const [variantId, setVariantId] = useState(null);
   const [name, setName] = useState("");
 
+  // 🔥 ATTRIBUTE SELECTION (ID ONLY)
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
+
   const resetSellerProduct = () => {
     setActiveStep(0);
     setCategoryId(null);
@@ -21,12 +23,12 @@ export const SellerProductProvider = ({ children }) => {
     setProductId(null);
     setVariantId(null);
     setName("");
+    setSelectedAttributes([]);
   };
 
   return (
     <SellerProductContext.Provider
       value={{
-        // 👇 THIS WAS MISSING
         activeStep,
         setActiveStep,
 
@@ -44,6 +46,10 @@ export const SellerProductProvider = ({ children }) => {
 
         name,
         setName,
+
+        // 🔥 ATTRIBUTE STATE
+        selectedAttributes,
+        setSelectedAttributes,
 
         resetSellerProduct,
       }}
