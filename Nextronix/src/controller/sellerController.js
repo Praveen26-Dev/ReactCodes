@@ -39,6 +39,33 @@ const sellerController = {
     return res.data;
   },
 
+  saveProductSpecifications: async (productId, data) => {
+  const res = await sellerService.saveProductSpecification(
+    productId,
+    data
+  );
+  return res.data;
+},
+
+getProductSpecifications: async (productId) => {
+  const res = await sellerService.getProductSpecification(
+    productId
+  );
+  return res.data;
+},
+
+saveProductManufacturerInfo: async (productId, content) => {
+  const res = await sellerService.saveProductManufacturerInfo(
+    productId,
+    content
+  );
+  return res.data;
+},
+
+getProductManufacturerInfo: async (productId) => {
+  const res = await sellerService.getProductManufacturerInfo(productId);
+  return res.data;
+},
   /* ================= FEATURES ================= */
 
   saveFeatures: async (productId, features) => {

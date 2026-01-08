@@ -27,6 +27,34 @@ const sellerService = {
   getProductById: (id) =>
     api.get(`/api/products/id/${id}`), // recommended addition
 
+
+  saveProductSpecification: (productId, data) => {
+  return api.post(
+    `/api/products/${productId}/specifications/bulk`,
+    data
+  );
+},
+
+getProductSpecification: (productId) => {
+  return api.get(
+    `/api/products/${productId}/specifications`
+  );
+},
+
+
+saveProductManufacturerInfo: (productId, data) => {
+  // data = { content: "...." }
+  return api.post(
+    `/api/manufacture/${productId}/manufacturer-info`,
+    data
+  );
+},
+
+getProductManufacturerInfo: (productId) => {
+  return api.get(
+    `/api/manufacture/${productId}/manufacturer-info`
+  );
+},
   /* ================= FEATURES ================= */
 
   saveFeatures: (productId, features) =>
@@ -66,6 +94,7 @@ const sellerService = {
     api.get(`/api/variants/${variantId}/pricing`),
 
   /* ================= PRODUCT IMAGES ================= */
+
 
   uploadProductImages: (productId, variantId, files) => {
     const formData = new FormData();
