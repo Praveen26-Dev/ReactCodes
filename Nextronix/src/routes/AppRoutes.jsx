@@ -9,7 +9,7 @@ import Cart from '../pages/Cart'
 import Profile from "../pages/Profile";
 import '../App.css'
 import CreateProductPage from "../pages/seller/CreateProductPage";
-
+import ProductDetailPage from "../pages/buyer/ProductDetail";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -22,7 +22,7 @@ const AppRoutes = () => {
       <Route path="/cart" element={<Cart />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/seller/create-product" element={<CreateProductPage />} />
-
+      <Route path="/product/:productId" element={<ProductDetailPage />} />
     </Routes>
   );
 };
