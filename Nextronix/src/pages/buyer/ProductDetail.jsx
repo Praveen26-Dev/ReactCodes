@@ -1,20 +1,31 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import buyerController from "../../controller/buyerController";
+import VariantSelector from "../../components/buyer/VariantSelector";
 
-const ProductDetailPage = () => {
+export default function ProductDetail() {
   const { productId } = useParams();
+
   const [data, setData] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const [selectedAttributes, setSelectedAttributes] = useState({});
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [isUnavailable, setIsUnavailable] = useState(false);
+
+  const [zoom, setZoom] = useState({
+    active: false,
+    x: 50,
+    y: 50
+  });
 
   useEffect(() => {
     buyerController.getProductPage(productId).then((res) => {
       setData(res);
 
-      // set default main image
+      const imgs = res.images || [];
       const primary =
-        res.images.find((i) => i.isPrimary)?.imageUrl ||
-        res.images[0]?.imageUrl;
+        imgs.find((i) => i.isPrimary)?.imageUrl || imgs[0]?.imageUrl;
 
       setSelectedImage(primary);
     });
@@ -29,19 +40,17 @@ const ProductDetailPage = () => {
   }
 
   const {
-    product,
-    images,
-    attributes,
-    features,
-    specifications,
-    breadcrumb,
-    pricing
+    name,
+    description,
+    brandName,
+    breadcrumb = [],
+    images = [],
+    attributes = [],
+    features = [],
+    specifications = [],
+    manufacturerInfo,
+    variants = []
   } = data;
-
-  // pick one pricing object (backend-driven)
-  const selectedPricing = pricing
-    ? Object.values(pricing)[0]
-    : null;
 
   return (
     <div className="bg-[#120e0e] text-gray-200 px-6 py-4">
@@ -49,173 +58,182 @@ const ProductDetailPage = () => {
       {/* BREADCRUMB */}
       <div className="text-xs text-gray-400 mb-3">
         {breadcrumb.map((b, i) => (
-          <span key={`${b.id}-${i}`}>
+          <span key={b.id || i}>
             {b.name}
             {i < breadcrumb.length - 1 && " > "}
           </span>
         ))}
       </div>
 
-      {/* TOP GRID */}
-      <div className="grid grid-cols-12 gap-4 mb-6">
+      {/* ========== TOP SECTION ========== */}
+      <div className="grid grid-cols-12 gap-4">
 
         {/* THUMBNAILS */}
         <div className="col-span-1 space-y-2">
-          {images.map((img, index) => {
-            const isActive = selectedImage === img.imageUrl;
-
-            return (
-              <img
-                key={img.id ?? `${img.imageUrl}-${index}`}
-                src={img.imageUrl}
-                alt=""
-                onClick={() => setSelectedImage(img.imageUrl)}
-                className={`w-14 h-14 object-cover rounded cursor-pointer border
-                  ${
-                    isActive
-                      ? "border-[#d4b46a]"
-                      : "border-white/10 hover:border-[#574724]"
-                  }`}
-              />
-            );
-          })}
+          {images.map((img) => (
+            <img
+              key={img.id}
+              src={img.imageUrl}
+              onClick={() => setSelectedImage(img.imageUrl)}
+              className={`w-14 h-14 object-cover rounded cursor-pointer border ${
+                selectedImage === img.imageUrl
+                  ? "border-[#d4b46a]"
+                  : "border-white/10"
+              }`}
+            />
+          ))}
         </div>
 
-        {/* MAIN IMAGE */}
-        <div className="col-span-5 bg-[#1a1414] border border-white/10 rounded-lg
-                        flex items-center justify-center">
-          <img
-            src={selectedImage}
-            alt={product.name}
-            className="max-h-[380px] object-contain transition-opacity duration-200"
-          />
+        {/* MAIN IMAGE WITH AMAZON ZOOM */}
+        <div className="col-span-5 relative z-20 h-[600px]">
+          <div
+            className="w-full h-full bg-[#1a1414] border border-white/10 rounded-lg relative overflow-visible"
+            onMouseEnter={() => setZoom(z => ({ ...z, active: true }))}
+            onMouseLeave={() => setZoom({ active: false, x: 50, y: 50 })}
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              setZoom({ active: true, x, y });
+            }}
+          >
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt={name}
+                className="absolute top-0 left-0 w-full h-full object-contain transition-transform duration-200"
+                style={{
+                  transform: zoom.active ? "scale(2)" : "scale(1)",
+                  transformOrigin: `${zoom.x}% ${zoom.y}%`
+                }}
+              />
+            )}
+          </div>
         </div>
 
         {/* BUY BOX */}
-        <div className="col-span-6">
-          <div className="sticky top-4 bg-[#1a1414] border border-white/10 rounded-lg p-4 space-y-3">
+        <div className="col-span-6 relative z-10 pl-6">
+          <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4 space-y-4">
 
-            <h1 className="text-xl font-medium leading-snug text-white">
-              {product.name}
-            </h1>
+            <h1 className="text-xl font-medium text-white">{name}</h1>
+            <p className="text-sm text-gray-400">Brand: {brandName}</p>
+            <p className="text-sm text-gray-300">{description}</p>
 
-            <div className="text-sm text-yellow-400">
-              ⭐⭐⭐⭐☆ <span className="text-gray-400">(124 ratings)</span>
-            </div>
+            <VariantSelector
+              attributes={attributes}
+              variants={variants}
+              selectedAttributes={selectedAttributes}
+              setSelectedAttributes={setSelectedAttributes}
+              selectedVariant={selectedVariant}
+              setSelectedVariant={setSelectedVariant}
+              setIsUnavailable={setIsUnavailable}
+            />
 
-            {/* PRICE (BACKEND-DRIVEN) */}
-            {selectedPricing && (
-              <div className="space-y-1">
-
-                {selectedPricing.discountType === "PERCENT" &&
-                  selectedPricing.discountValue > 0 && (
-                    <span className="text-sm font-medium text-red-500">
-                      -{selectedPricing.discountValue}%
-                    </span>
-                  )}
-
-                <div className="text-3xl font-semibold text-[#d4b46a] tracking-tight">
-                  ₹{selectedPricing.sellingPrice}
-                </div>
-
-                {selectedPricing.mrp > selectedPricing.sellingPrice && (
-                  <div className="text-sm text-gray-400">
-                    M.R.P.:{" "}
-                    <span className="line-through">
-                      ₹{selectedPricing.mrp}
-                    </span>
-                  </div>
-                )}
-
-                {selectedPricing.discount > 0 && (
-                  <div className="text-sm text-green-400">
-                    Extra ₹{selectedPricing.discount} off with offers
-                  </div>
-                )}
-
-                <div className="text-xs text-gray-500">
-                  Final price at checkout: ₹{selectedPricing.finalPrice}
-                </div>
-              </div>
+            {isUnavailable && (
+              <p className="text-red-400 text-sm">
+                This combination is currently unavailable
+              </p>
             )}
 
-            <div className="text-xs text-gray-400">
-              Inclusive of all taxes
-            </div>
-
-            {/* ATTRIBUTES */}
-            {Object.values(attributes).map((attr) => (
-              <div key={attr.id}>
-                <p className="text-xs text-gray-400 mb-1">
-                  {attr.name}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {attr.values.map((v) => (
-                    <button
-                      key={`${attr.id}-${v.id}`}
-                      className="px-3 py-1 text-xs border border-white/20 rounded
-                                 hover:border-[#574724] hover:bg-[#241b1b]"
-                    >
-                      {v.value}
-                    </button>
-                  ))}
+            {selectedVariant && (
+              <>
+                <div className="text-xl text-[#ffd814] font-semibold">
+                  ₹ {selectedVariant.price}
                 </div>
-              </div>
-            ))}
 
-            {/* ACTIONS */}
-            <div className="flex gap-3 pt-2">
-              <button className="flex-1 py-2 bg-[#574724] text-white rounded
-                                 hover:bg-[#6a5830]">
-                Add to Cart
-              </button>
-              <button className="flex-1 py-2 border border-[#574724]
-                                 text-[#d4b46a] rounded hover:bg-[#241b1b]">
-                Buy Now
-              </button>
-            </div>
+                <p className="text-sm text-gray-400">
+                  SKU: {selectedVariant.sku}
+                </p>
 
-            <div className="text-xs text-green-400">
-              In stock
-            </div>
+                <p
+                  className={`text-sm ${
+                    selectedVariant.stock > 0
+                      ? "text-green-400"
+                      : "text-red-400"
+                  }`}
+                >
+                  {selectedVariant.stock > 0 ? "In Stock" : "Out of Stock"}
+                </p>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    disabled={selectedVariant.stock === 0}
+                    className={`px-4 py-2 rounded w-full ${
+                      selectedVariant.stock > 0
+                        ? "bg-[#ffd814] text-black"
+                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    Add to Cart
+                  </button>
+
+                  <button
+                    disabled={selectedVariant.stock === 0}
+                    className={`px-4 py-2 rounded w-full ${
+                      selectedVariant.stock > 0
+                        ? "bg-[#ff9900] text-black"
+                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    Buy Now
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* ABOUT THIS ITEM */}
-      <section className="mb-6">
-        <h2 className="text-base font-semibold text-white mb-2">
-          About this item
-        </h2>
-        <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
-          {features.map((f, index) => (
-            <li key={`${f.feature}-${index}`}>
-              {f.feature}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* ========== DETAILS ========== */}
+      <div className="grid grid-cols-12 gap-6 mt-8">
 
-      {/* TECHNICAL DETAILS */}
-      <section className="mb-6">
-        <h2 className="text-base font-semibold text-white mb-2">
-          Technical Details
-        </h2>
-        <div className="border border-white/10 rounded overflow-hidden text-sm">
-          {specifications.map((spec) => (
-            <div
-              key={`${spec.specKey}-${spec.id}`}
-              className="grid grid-cols-2 px-3 py-2 border-b border-white/10"
-            >
-              <span className="text-gray-400">{spec.specKey}</span>
-              <span>{spec.specValue}</span>
+        {/* LEFT */}
+        <div className="col-span-8 space-y-6">
+
+          {features.length > 0 && (
+            <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4">
+              <h2 className="text-lg font-semibold mb-3">Highlights</h2>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-gray-300">
+                {features.map((f, i) => (
+                  <li key={i}>{f}</li>
+                ))}
+              </ul>
             </div>
-          ))}
-        </div>
-      </section>
+          )}
 
+          {specifications.length > 0 && (
+            <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4">
+              <h2 className="text-lg font-semibold mb-3">Technical Details</h2>
+              <div className="divide-y divide-white/10">
+                {specifications.map((s, i) => (
+                  <div key={i} className="grid grid-cols-3 py-2 text-sm">
+                    <div className="text-gray-400">{s.specKey}</div>
+                    <div className="col-span-2 text-gray-200">
+                      {s.specValue}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+
+        {/* RIGHT */}
+        <div className="col-span-4">
+          {manufacturerInfo?.content && (
+            <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4">
+              <h2 className="text-lg font-semibold mb-2">
+                About {brandName}
+              </h2>
+              <p className="text-sm text-gray-300 leading-relaxed">
+                {manufacturerInfo.content}
+              </p>
+            </div>
+          )}
+        </div>
+
+      </div>
     </div>
   );
-};
-
-export default ProductDetailPage;
+}
