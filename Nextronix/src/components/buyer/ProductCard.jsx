@@ -1,12 +1,32 @@
 import { useNavigate } from "react-router-dom";
+import buyerController from "../../controller/buyerController";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
-  const handleAddToCart = (e) => {
-    e.stopPropagation(); // stop navigation
-    console.log("Add to cart:", product.productId);
-    // later → call cart API here
+  const handleAddToCart = async (e) => {
+    e.stopPropagation(); // prevent navigation
+
+    if (!product.variants || product.variants.length === 0) {
+      alert("This product has no variants");
+      return;
+    }
+
+    const defaultVariant = product.variants[0]; // 👈 first variant
+
+    try {
+      await buyerController.addToCart({
+        userId: 1, // demo user
+        productId: product.productId,
+        variantId: defaultVariant.id,
+        qty: 1
+      });
+
+      alert("Added to cart 🛒");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to cart");
+    }
   };
 
   return (

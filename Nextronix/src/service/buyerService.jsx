@@ -17,6 +17,25 @@ const buyerService = {
   // getVariantPricing:(variantId)=>{
   //   api.get(`/api/buyer/${variantId}/pricing`)
   // }
+  /* ================= CART ================= */
+
+   addToCart: (payload) =>
+    api.post("/api/cart/add", payload),
+
+  getCart: (userId) =>
+    api.get(`/api/cart/${userId}`),
+
+  decreaseQty: (cartItemId) =>
+    api.post(`/api/cart/decrease/${cartItemId}`),
+
+  removeFromCart: (cartItemId) =>
+    api.delete(`/api/cart/${cartItemId}`),
+
+  clearCart: (userId) =>
+    api.delete(`/api/cart/clear/${userId}`),
+
+  getCartCount: (userId) =>
+    api.get(`/api/cart/count/${userId}`)
 };
 
 export default buyerService;

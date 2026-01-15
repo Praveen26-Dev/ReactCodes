@@ -2,22 +2,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import buyerController from "../../controller/buyerController";
 import VariantSelector from "../../components/buyer/VariantSelector";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProductDetail() {
   const { productId } = useParams();
-
+  const navigate = useNavigate();
+  const { user } = useAuth();
+ 
   const [data, setData] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isUnavailable, setIsUnavailable] = useState(false);
-
-  const [zoom, setZoom] = useState({
-    active: false,
-    x: 50,
-    y: 50
-  });
 
   useEffect(() => {
     buyerController.getProductPage(productId).then((res) => {
@@ -49,8 +47,45 @@ export default function ProductDetail() {
     features = [],
     specifications = [],
     manufacturerInfo,
-    variants = []
+    variants = [],
+    pricing = {},
   } = data;
+
+  const selectedPricing =
+    selectedVariant && pricing[selectedVariant.id];
+
+    const percentOff =
+  selectedPricing
+    ? Math.round((selectedPricing.discount / selectedPricing.mrp) * 100)
+    : 0;
+
+
+const handleAddToCart = async () => {
+  if (!user) {
+    navigate("/login");
+    return;
+  }
+
+  if (!selectedVariant) {
+    alert("Please select a variant");
+    return;
+  }
+
+  try {
+    await buyerController.addToCart({
+      userId: user.id,
+      productId: data.productId,
+      variantId: selectedVariant.id,
+      quantity: 1
+    });
+
+    alert("Added to cart 🛒");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to add to cart");
+  }
+};
+
 
   return (
     <div className="bg-[#120e0e] text-gray-200 px-6 py-4">
@@ -84,38 +119,20 @@ export default function ProductDetail() {
           ))}
         </div>
 
-        {/* MAIN IMAGE WITH AMAZON ZOOM */}
-        <div className="col-span-5 relative z-20 h-[600px]">
-          <div
-            className="w-full h-full bg-[#1a1414] border border-white/10 rounded-lg relative overflow-visible"
-            onMouseEnter={() => setZoom(z => ({ ...z, active: true }))}
-            onMouseLeave={() => setZoom({ active: false, x: 50, y: 50 })}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = ((e.clientX - rect.left) / rect.width) * 100;
-              const y = ((e.clientY - rect.top) / rect.height) * 100;
-              setZoom({ active: true, x, y });
-            }}
-          >
-            {selectedImage && (
-              <img
-                src={selectedImage}
-                alt={name}
-                className="absolute top-0 left-0 w-full h-full object-contain transition-transform duration-200"
-                style={{
-                  transform: zoom.active ? "scale(2)" : "scale(1)",
-                  transformOrigin: `${zoom.x}% ${zoom.y}%`
-                }}
-              />
-            )}
-          </div>
+        {/* MAIN IMAGE */}
+        <div className="col-span-4 bg-[#1a1414] border border-white/10 rounded-lg flex items-center justify-center">
+          <img
+            src={selectedImage}
+            alt={name}
+            className="h-[600px] object-contain"
+          />
         </div>
 
         {/* BUY BOX */}
-        <div className="col-span-6 relative z-10 pl-6">
+        <div className="col-span-6 pl-6">
           <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4 space-y-4">
 
-            <h1 className="text-xl font-medium text-white">{name}</h1>
+            <h1 className="text-xl text-white">{name}</h1>
             <p className="text-sm text-gray-400">Brand: {brandName}</p>
             <p className="text-sm text-gray-300">{description}</p>
 
@@ -124,7 +141,6 @@ export default function ProductDetail() {
               variants={variants}
               selectedAttributes={selectedAttributes}
               setSelectedAttributes={setSelectedAttributes}
-              selectedVariant={selectedVariant}
               setSelectedVariant={setSelectedVariant}
               setIsUnavailable={setIsUnavailable}
             />
@@ -135,11 +151,31 @@ export default function ProductDetail() {
               </p>
             )}
 
-            {selectedVariant && (
+            {selectedVariant && selectedPricing && (
               <>
-                <div className="text-xl text-[#ffd814] font-semibold">
-                  ₹ {selectedVariant.price}
+                {/* Final Price */}
+                {/* MRP + Discount */}
+               <div className="flex items-center gap-3">
+                  <div className="text-2xl font-semibold text-[#ffd814]">
+                    ₹ {Math.round(selectedPricing.finalPrice).toLocaleString()}
+                  </div>
+
+                  {percentOff > 0 && (
+                    <div className="bg-red-600 text-white text-xs px-2 py-1 rounded">
+                      {percentOff}% OFF
+                    </div>
+                  )}
                 </div>
+
+                <div className="text-sm text-gray-400 flex gap-2">
+                  <span className="line-through">
+                    ₹ {Math.round(selectedPricing.mrp).toLocaleString()}
+                  </span>
+                  <span className="text-green-400">
+                    You save ₹ {Math.round(selectedPricing.discount).toLocaleString()}
+                  </span>
+                </div>
+
 
                 <p className="text-sm text-gray-400">
                   SKU: {selectedVariant.sku}
@@ -156,23 +192,25 @@ export default function ProductDetail() {
                 </p>
 
                 <div className="flex gap-3 pt-4">
-                  <button
+                 <button
                     disabled={selectedVariant.stock === 0}
+                    onClick={handleAddToCart}
                     className={`px-4 py-2 rounded w-full ${
                       selectedVariant.stock > 0
                         ? "bg-[#ffd814] text-black"
-                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-700 text-gray-400"
                     }`}
                   >
-                    Add to Cart
-                  </button>
+                  Add to Cart
+                </button>
+
 
                   <button
                     disabled={selectedVariant.stock === 0}
                     className={`px-4 py-2 rounded w-full ${
                       selectedVariant.stock > 0
                         ? "bg-[#ff9900] text-black"
-                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-700 text-gray-400"
                     }`}
                   >
                     Buy Now
@@ -184,12 +222,13 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* ========== DETAILS ========== */}
+      {/* ========== DETAILS SECTION ========== */}
       <div className="grid grid-cols-12 gap-6 mt-8">
 
         {/* LEFT */}
         <div className="col-span-8 space-y-6">
 
+          {/* FEATURES */}
           {features.length > 0 && (
             <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4">
               <h2 className="text-lg font-semibold mb-3">Highlights</h2>
@@ -201,6 +240,7 @@ export default function ProductDetail() {
             </div>
           )}
 
+          {/* SPECIFICATIONS */}
           {specifications.length > 0 && (
             <div className="bg-[#1a1414] border border-white/10 rounded-lg p-4">
               <h2 className="text-lg font-semibold mb-3">Technical Details</h2>

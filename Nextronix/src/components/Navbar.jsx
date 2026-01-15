@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const { user, logout } = useAuth(); // 🔥 live aut
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = () => {
+    logout();
     navigate("/login");
   };
 
@@ -24,7 +25,6 @@ const Navbar = () => {
           Nextronix
         </Link>
 
-        {/* HOME LINK */}
         <Link
           to="/"
           className="text-gray-300 hover:text-yellow-400 transition font-medium"
@@ -32,7 +32,7 @@ const Navbar = () => {
           Home
         </Link>
 
-        {/* SEARCH BAR */}
+        {/* SEARCH */}
         <div className="flex-1 hidden md:flex max-w-xl">
           <input
             type="text"
@@ -43,63 +43,47 @@ const Navbar = () => {
           />
           <button
             className="px-4 rounded-r-xl font-semibold text-black
-            bg-gradient-to-r from-yellow-400 to-orange-500
-            hover:brightness-110 transition"
+            bg-gradient-to-r from-yellow-400 to-orange-500"
           >
             🔍
           </button>
         </div>
 
-        {/* RIGHT ACTIONS */}
+        {/* RIGHT */}
         <div className="flex items-center gap-5">
 
           {/* CART */}
-          <Link
-            to="/cart"
-            className="relative text-xl text-gray-300 hover:text-yellow-400 transition"
-          >
+          <Link to="/cart" className="relative text-xl text-gray-300 hover:text-yellow-400">
             🛒
-            <span
-              className="absolute -top-2 -right-3 text-xs font-bold px-1.5 py-0.5 rounded-full
-              bg-gradient-to-r from-yellow-400 to-orange-500 text-black"
-            >
-              2
-            </span>
+
+
           </Link>
 
           {/* AUTH */}
-          {!token ? (
+          {!user ? (
             <>
-              <Link
-                to="/login"
-                className="text-gray-300 hover:text-yellow-400 transition"
-              >
+              <Link to="/login" className="text-gray-300 hover:text-yellow-400">
                 Login
               </Link>
 
               <Link
                 to="/register"
                 className="px-4 py-2 rounded-xl font-semibold text-black
-                bg-gradient-to-r from-yellow-400 to-orange-500
-                hover:scale-105 transition"
+                bg-gradient-to-r from-yellow-400 to-orange-500"
               >
                 Register
               </Link>
             </>
           ) : (
             <>
-              <Link
-                to="/profile"
-                className="text-gray-300 hover:text-yellow-400 transition"
-              >
-                Profile
-              </Link>
+              <span className="text-yellow-400 font-semibold">
+                Hello, {user.name}
+              </span>
 
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="px-4 py-2 rounded-xl font-semibold text-white
-                bg-gradient-to-r from-red-500 to-rose-600
-                hover:brightness-110 transition"
+                bg-gradient-to-r from-red-500 to-rose-600"
               >
                 Logout
               </button>

@@ -25,6 +25,38 @@ const buyerController = {
   //   const res = await buyerService.getVariantPricing(variantId)
   //   return res.data;
   // }
+
+    /* ================= CART ================= */
+
+  addToCart: async (payload) => {
+    const res = await buyerService.addToCart(payload);
+    return res.data;
+  },
+
+  getCart: async (userId) => {
+    const res = await buyerService.getCart(userId);
+    return res.data;
+  },
+
+  decreaseQty: async (cartItemId) => {
+    const res = await buyerService.decreaseQty(cartItemId);
+    return res.data;
+  },
+
+  removeFromCart: async (cartItemId) => {
+    const res = await buyerService.removeFromCart(cartItemId);
+    return res.data;
+  },
+
+  clearCart: async (userId) => {
+    const res = await buyerService.clearCart(userId);
+    return res.data;
+  },
+
+  getCartCount: async (userId) => {
+    const res = await buyerService.getCartCount(userId);
+    return res.data;
+  }
 };
 
 export default buyerController;
