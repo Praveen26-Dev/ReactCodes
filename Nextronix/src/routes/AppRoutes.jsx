@@ -5,12 +5,16 @@ import VerifyOtp from "../pages/VerifyOtp";
 import Login from "../pages/Login";
 import ResetPassword from "../pages/ResetPassword";
 import ForgotPassword from "../pages/ForgotPassword";
-import CartPage from '../pages/Cart'
+import CartPage from '../pages/buyer/Cart'
 import Profile from "../pages/Profile";
 import '../App.css'
 import CreateProductPage from "../pages/seller/CreateProductPage";
 import ProductListing from "../pages/buyer/ProductListing";
 import ProductDetailPage from "../pages/buyer/ProductDetail";
+import CheckoutPage from "../pages/buyer/Checkout";
+
+import Wishlist from "../pages/buyer/Wishlist"
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -26,6 +30,9 @@ const AppRoutes = () => {
       <Route path="/products" element={<ProductListing />} />
       {/* <Route path={`/products/${productId}`} element={<ProductDetailPage />} /> */}
       <Route path="/product/:productId" element={<ProductDetailPage />} />
+      <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+    
     </Routes>
   );
 };

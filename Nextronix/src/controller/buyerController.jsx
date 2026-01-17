@@ -56,6 +56,38 @@ const buyerController = {
   getCartCount: async (userId) => {
     const res = await buyerService.getCartCount(userId);
     return res.data;
+  },
+  /* ================= WISHLIST ================= */
+
+  addToWishlist: async (userId, productId) => {
+    const res = await buyerService.addToWishlist({
+      userId,
+      productId
+    });
+    return res.data;
+  },
+
+  getWishlist: async (userId) => {
+    const res = await buyerService.getWishlist(userId);
+    return res.data;
+  },
+
+  removeFromWishlist: async (userId, productId) => {
+    const res = await buyerService.removeFromWishlist(userId, productId);
+    return res.data;
+  },
+  /* ================= CHECKOUT ================= */
+
+ /* ================= CHECKOUT ================= */
+
+  checkout: async (userId) => {
+    const res = await buyerService.checkout(userId);
+    return res.data;
+  },
+
+  getOrders: async (userId) => {
+    const res = await buyerService.getOrders(userId);
+    return res.data;
   }
 };
 

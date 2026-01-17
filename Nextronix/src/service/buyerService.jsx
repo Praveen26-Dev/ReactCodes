@@ -35,7 +35,23 @@ const buyerService = {
     api.delete(`/api/cart/clear/${userId}`),
 
   getCartCount: (userId) =>
-    api.get(`/api/cart/count/${userId}`)
+    api.get(`/api/cart/count/${userId}`),
+  addToWishlist: (payload) =>
+    api.post("/api/wishlist/add", payload),
+
+  getWishlist: (userId) =>
+    api.get(`/api/wishlist/${userId}`),
+
+  removeFromWishlist: (userId, productId) =>
+    api.delete(`/api/wishlist/remove?userId=${userId}&productId=${productId}`),
+
+  //=========================Checkout==================
+  checkout: (userId) =>
+    api.post(`/api/checkout/${userId}`),
+
+  getOrders: (userId) =>
+    api.get(`/api/checkout/${userId}`)
+
 };
 
 export default buyerService;
