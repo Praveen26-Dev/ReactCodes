@@ -7,8 +7,8 @@ const AddTodo = ({updateList}) => {
        <input 
        type="text"  
        placeholder='Add Your Todo..........'
-      value={inputText}
-      onChange={e=>setInputText(e.target.value)}
+       value={inputText}
+       onChange={e=>setInputText(e.target.value)}
        />
        <button onClick={()=>{
         updateList(inputText)
