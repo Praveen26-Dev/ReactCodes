@@ -1,0 +1,97 @@
+{
+  "registers": [
+    {
+      "id": 1,
+      "name": "Main Counter",
+      "location": "Ground Floor",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Cash Counter 2",
+      "location": "First Floor",
+      "isActive": true
+    }
+  ],
+
+  "registerSessions": [
+    {
+      "id": 1,
+      "registerId": 1,
+      "openedBy": "Admin",
+      "openedAt": "2026-01-27T09:00:00",
+      "closedAt": null,
+      "openingBalance": 5000,
+      "closingBalance": null,
+      "status": "OPEN"
+    }
+  ],
+
+  "tables": [
+    {
+      "id": 1,
+      "tableNumber": "T1",
+      "capacity": 4,
+      "floor": "Ground Floor",
+      "status": "FREE",
+      "activeSessionId": 1
+    },
+    {
+      "id": 2,
+      "tableNumber": "T2",
+      "capacity": 2,
+      "floor": "Ground Floor",
+      "status": "OCCUPIED",
+      "activeSessionId": 1
+    },
+    {
+      "id": 3,
+      "tableNumber": "T3",
+      "capacity": 6,
+      "floor": "First Floor",
+      "status": "FREE",
+      "activeSessionId": 1
+    }
+  ],
+
+  "orders": [
+    {
+      "id": 1,
+      "orderNo": "ORD-1001",
+      "tableId": 2,
+      "registerSessionId": 1,
+      "orderType": "DINE_IN",
+      "status": "RUNNING",
+      "totalAmount": 300,
+      "createdAt": "2026-01-27T10:15:00"
+    }
+  ],
+
+  "orderItems": [
+    {
+      "id": 1,
+      "orderId": 1,
+      "itemName": "Jeera Rice",
+      "price": 120,
+      "quantity": 1
+    },
+    {
+      "id": 2,
+      "orderId": 1,
+      "itemName": "Veg Biryani",
+      "price": 180,
+      "quantity": 1
+    }
+  ],
+
+  "payments": [
+    {
+      "id": 1,
+      "orderId": 1,
+      "method": "UPI",
+      "amount": 300,
+      "status": "SUCCESS",
+      "paidAt": "2026-01-27T10:25:00"
+    }
+  ]
+}
